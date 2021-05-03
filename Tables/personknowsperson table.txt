@@ -1,0 +1,54 @@
+CREATE TABLE personknowsperson(
+    id_person1 NUMBER(10),
+    id_person2 NUMBER(10),
+    id_relationship NUMBER(8)
+);
+
+
+ALTER TABLE personknowsperson
+ADD CONSTRAINT pk_personknowsperson PRIMARY KEY (id_person1, id_person2)
+USING INDEX 
+TABLESPACE pe_ind PCTFREE 20
+STORAGE (INITIAL 10K NEXT 10K PCTINCREASE 0);
+
+
+ALTER TABLE personknowsperson
+ADD CONSTRAINT fk_pkp_person1 FOREIGN KEY
+(id_person1) REFERENCES person(id_person);
+
+
+ALTER TABLE personknowsperson
+ADD CONSTRAINT fk_pkp_person2 FOREIGN KEY
+(id_person2) REFERENCES person(id_person);
+
+ALTER TABLE personknowsperson
+ADD CONSTRAINT fk_pkp_id_relationship FOREIGN KEY
+(id_relationship) REFERENCES relationship(id_relationship);
+
+ALTER TABLE personknowsperson
+ADD creation_date DATE
+ADD creation_user VARCHAR(10)
+ADD date_last_modification DATE
+ADD user_last_modification VARCHAR(10);
+
+
+
+CREATE OR REPLACE TRIGGER pe.beforeInsertpkp
+BEFORE INSERT
+ON pe.personknowsperson
+FOR EACH ROW
+BEGIN
+    :new.creation_date := SYSDATE;
+    :new.creation_user := USER;
+END beforeInsertpkp; 
+
+/
+
+CREATE OR REPLACE TRIGGER pe.beforeUPDATEpkp
+BEFORE UPDATE
+ON pe.personknowsperson
+FOR EACH ROW
+BEGIN
+    :new.date_last_modification:= SYSDATE;
+    :new.user_last_modification:= USER;
+END beforeUPDATEpkp; 

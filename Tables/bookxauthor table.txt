@@ -1,0 +1,50 @@
+CREATE TABLE bookXauthor(
+    id_book NUMBER(10),
+    id_author NUMBER(10)
+);
+
+
+ALTER TABLE bookXauthor
+ADD CONSTRAINT pk_bookXauthor PRIMARY KEY (id_book, id_author)
+USING INDEX 
+TABLESPACE pe_ind PCTFREE 20
+STORAGE (INITIAL 10K NEXT 10K PCTINCREASE 0);
+
+
+ALTER TABLE bookXauthor
+ADD CONSTRAINT fk_bookxauthor_book FOREIGN KEY
+(id_book) REFERENCES book(id_book);
+
+
+ALTER TABLE bookXauthor
+ADD CONSTRAINT fk_bookxauthor_author FOREIGN KEY
+(id_author) REFERENCES author(id_author);
+
+
+ALTER TABLE bookXauthor
+ADD creation_date DATE
+ADD creation_user VARCHAR(10)
+ADD date_last_modification DATE
+ADD user_last_modification VARCHAR(10);
+
+
+
+CREATE OR REPLACE TRIGGER pe.beforeInsertbxa
+BEFORE INSERT
+ON pe.bookxauthor
+FOR EACH ROW
+BEGIN
+    :new.creation_date := SYSDATE;
+    :new.creation_user := USER;
+END beforeInsertbxa; 
+
+/
+
+CREATE OR REPLACE TRIGGER pe.beforeUPDATEbxa
+BEFORE UPDATE
+ON pe.bookxauthor
+FOR EACH ROW
+BEGIN
+    :new.date_last_modification:= SYSDATE;
+    :new.user_last_modification:= USER;
+END beforeUPDATEbxa; 

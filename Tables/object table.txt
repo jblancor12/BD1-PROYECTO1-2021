@@ -1,0 +1,59 @@
+CREATE TABLE newobject(
+    id_object NUMBER(8) CONSTRAINT id_object_not_null NOT NULL,
+    description VARCHAR2(45) CONSTRAINT ot_description_not_null NOT NULL,
+    id_object_type NUMBER(8) cONSTRAINT ot_id_object_type_nn NOT NULL
+);
+
+/*==================================================COMENTARIOS EN TABLAS Y COLUMNAS======================================================*/
+
+COMMENT ON TABLE newobject
+IS 'Repository to store info about objects.';
+
+/*==================================================CREACIÃ“N DE LLAVES PRIMARIAS======================================================*/
+
+ALTER TABLE newobject
+ADD CONSTRAINT pk_object PRIMARY KEY (id_object)
+USING INDEX 
+TABLESPACE pe_ind PCTFREE 20
+STORAGE (INITIAL 10k NEXT 10K PCTINCREASE 0);
+
+/*==================================================CAMPOS DE AUDITORÃ�A PARA TABLAS======================================================*/
+
+ALTER TABLE newobject
+ADD creation_date DATE
+ADD creation_user VARCHAR(10)
+ADD date_last_modification DATE
+ADD user_last_modification VARCHAR(10);
+
+/*==================================================CREACIÃ“N DE SECUENCIAS PARA TABLAS======================================================*/
+
+CREATE SEQUENCE s_object
+START WITH 0
+INCREMENT BY 1
+MINVALUE 0
+MAXVALUE 999999999999
+NOCACHE
+NOCYCLE;
+
+/*==================================================CREACIÃ“N DE TRIGGERS PARA TABLAS======================================================*/
+
+CREATE OR REPLACE TRIGGER pe.beforeInsertObject
+BEFORE INSERT
+ON pe.newobject
+FOR EACH ROW
+BEGIN
+	:new.id_object := s_object.nextval;
+    :new.creation_date := SYSDATE;
+    :new.creation_user := USER;
+END beforeInsertObject; 
+
+/
+
+CREATE OR REPLACE TRIGGER pe.beforeUpdateObject
+BEFORE UPDATE
+ON pe.newobject
+FOR EACH ROW
+BEGIN
+    :new.date_last_modification:= SYSDATE;
+    :new.user_last_modification:= USER;
+END beforeUpdateObject; 

@@ -1,0 +1,58 @@
+CREATE TABLE calification(
+    id_calification NUMBER(8) CONSTRAINT id_calification_nn NOT NULL,
+    score NUMBER(10) CONSTRAINT calification_score_nn NOT NULL
+);
+
+/*==================================================COMENTARIOS EN TABLAS Y COLUMNAS======================================================*/
+
+COMMENT ON TABLE calification
+IS 'Repository to store info about book califications.';
+
+/*==================================================CREACIÃ“N DE LLAVES PRIMARIAS======================================================*/
+
+ALTER TABLE calification
+ADD CONSTRAINT pk_calification PRIMARY KEY (id_calification)
+USING INDEX 
+TABLESPACE pe_ind PCTFREE 20
+STORAGE (INITIAL 10k NEXT 10K PCTINCREASE 0);
+
+/*==================================================CAMPOS DE AUDITORÃ�A PARA TABLAS======================================================*/
+
+ALTER TABLE calification
+ADD creation_date DATE
+ADD creation_user VARCHAR(10)
+ADD date_last_modification DATE
+ADD user_last_modification VARCHAR(10);
+
+/*==================================================CREACIÃ“N DE SECUENCIAS PARA TABLAS======================================================*/
+
+CREATE SEQUENCE s_calification
+START WITH 0
+INCREMENT BY 1
+MINVALUE 0
+MAXVALUE 999999999999
+NOCACHE
+NOCYCLE;
+
+/*==================================================CREACIÃ“N DE TRIGGERS PARA TABLAS======================================================*/
+
+CREATE OR REPLACE TRIGGER pe.beforeInsertCalification
+BEFORE INSERT
+ON pe.calification
+FOR EACH ROW
+BEGIN
+	:new.id_calification := s_calification.nextval;
+    :new.creation_date := SYSDATE;
+    :new.creation_user := USER;
+END beforeInsertCalification; 
+
+/
+
+CREATE OR REPLACE TRIGGER pe.beforeUpdateCalification
+BEFORE UPDATE
+ON pe.calification
+FOR EACH ROW
+BEGIN
+    :new.date_last_modification:= SYSDATE;
+    :new.user_last_modification:= USER;
+END beforeUpdateCalification; 

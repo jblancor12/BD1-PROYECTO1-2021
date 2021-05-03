@@ -1,0 +1,63 @@
+CREATE TABLE person(
+    id_person NUMBER(8) CONSTRAINT id_person_not_null NOT NULL,
+    first_name VARCHAR2(45) CONSTRAINT first_name_not_null NOT NULL,
+    last_name VARCHAR2(45) CONSTRAINT last_name_not_null NOT NULL,
+    birthday DATE CONSTRAINT birthday_not_null NOT NULL,
+    email VARCHAR2(45) CONSTRAINT email_not_null NOT NULL,
+    username VARCHAR2(45),
+    password VARCHAR2(45) 
+);
+
+/*==================================================COMENTARIOS EN TABLAS Y COLUMNAS======================================================*/
+
+COMMENT ON TABLE person
+IS 'Repository to store info about people.';
+
+/*==================================================CREACIÃ“N DE LLAVES PRIMARIAS======================================================*/
+
+ALTER TABLE person
+ADD CONSTRAINT pk_person PRIMARY KEY (id_person)
+USING INDEX 
+TABLESPACE pe_ind PCTFREE 20
+STORAGE (INITIAL 10k NEXT 10K PCTINCREASE 0);
+
+/*==================================================CAMPOS DE AUDITORÃ�A PARA TABLAS======================================================*/
+
+ALTER TABLE person
+ADD creation_date DATE
+ADD creation_user VARCHAR(10)
+ADD date_last_modification DATE
+ADD user_last_modification VARCHAR(10);
+
+/*==================================================CREACIÃ“N DE SECUENCIAS PARA TABLAS======================================================*/
+
+CREATE SEQUENCE s_person
+START WITH 0
+INCREMENT BY 1
+MINVALUE 0
+MAXVALUE 999999999999
+NOCACHE
+NOCYCLE;
+
+/*==================================================CREACIÃ“N DE TRIGGERS PARA TABLAS======================================================*/
+
+CREATE OR REPLACE TRIGGER pe.beforeInsertPerson
+BEFORE INSERT
+ON pe.person
+FOR EACH ROW
+BEGIN
+	:new.id_person := s_person.nextval;
+    :new.creation_date := SYSDATE;
+    :new.creation_user := USER;
+END beforeInsertPerson; 
+
+/
+
+CREATE OR REPLACE TRIGGER pe.beforeUpdatePerson
+BEFORE UPDATE
+ON pe.person
+FOR EACH ROW
+BEGIN
+    :new.date_last_modification:= SYSDATE;
+    :new.user_last_modification:= USER;
+END beforeUpdatePerson; 

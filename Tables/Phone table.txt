@@ -1,0 +1,66 @@
+CREATE TABLE phone(
+    id_phone NUMBER(8),
+    phone_number NUMBER(30) CONSTRAINT phone_number_not_null NOT NULL
+);
+
+/*==================================================COMENTARIOS EN TABLAS Y COLUMNAS======================================================*/
+
+COMMENT ON TABLE phone
+IS 'Repository to store info about phone numbers.';
+
+
+COMMENT ON Column phone.id_phone
+IS 'Phone identification code.';
+
+
+COMMENT ON Column phone.phone_number
+IS 'Phone number description.';
+
+/*==================================================CREACIÓN DE LLAVES PRIMARIAS======================================================*/
+
+ALTER TABLE phone
+ADD CONSTRAINT pk_phone PRIMARY KEY (id_phone)
+USING INDEX 
+TABLESPACE pe_ind PCTFREE 20
+STORAGE (INITIAL 10k NEXT 10K PCTINCREASE 0);
+
+/*==================================================CAMPOS DE AUDITOR�?A PARA TABLAS======================================================*/
+
+ALTER TABLE phone
+ADD creation_date DATE
+ADD creation_user VARCHAR(10)
+ADD date_last_modification DATE
+ADD user_last_modification VARCHAR(10);
+
+/*==================================================CREACIÓN DE SECUENCIAS PARA TABLAS======================================================*/
+
+CREATE SEQUENCE s_phone
+START WITH 0
+INCREMENT BY 1
+MINVALUE 0
+MAXVALUE 999999999999
+NOCACHE
+NOCYCLE;
+
+/*==================================================CREACIÓN DE TRIGGERS PARA TABLAS======================================================*/
+
+CREATE OR REPLACE TRIGGER pe.beforeInsertPhone
+BEFORE INSERT
+ON pe.phone
+FOR EACH ROW
+BEGIN
+	:new.id_phone := s_phone.nextval;
+    :new.creation_date := SYSDATE;
+    :new.creation_user := USER;
+END beforeInsertPhone; 
+
+/
+
+CREATE OR REPLACE TRIGGER pe.beforeUpdatePhone
+BEFORE UPDATE
+ON pe.phone
+FOR EACH ROW
+BEGIN
+    :new.date_last_modification:= SYSDATE;
+    :new.user_last_modification:= USER;
+END beforeUpdatePhone; 

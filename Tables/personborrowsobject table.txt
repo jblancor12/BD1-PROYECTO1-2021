@@ -1,0 +1,56 @@
+CREATE TABLE personborrowsobject(
+    id_object NUMBER(10),
+    id_person NUMBER(10),
+    id_relationship NUMBER(10),
+    loan_date DATE,
+    return_date DATE
+);
+
+
+ALTER TABLE personborrowsobject
+ADD CONSTRAINT pk_pbo PRIMARY KEY (id_object, id_person)
+USING INDEX 
+TABLESPACE pe_ind PCTFREE 20
+STORAGE (INITIAL 10K NEXT 10K PCTINCREASE 0);
+
+
+ALTER TABLE personborrowsobject
+ADD CONSTRAINT fk_pbo_object FOREIGN KEY
+(id_object) REFERENCES newobject(id_object);
+
+
+ALTER TABLE personborrowsobject
+ADD CONSTRAINT fk_pbo_person FOREIGN KEY
+(id_person) REFERENCES person(id_person);
+
+ALTER TABLE personborrowsobject
+ADD CONSTRAINT fk_pbo_relationship FOREIGN KEY
+(id_relationship) REFERENCES relationship(id_relationship);
+
+ALTER TABLE personborrowsobject
+ADD creation_date DATE
+ADD creation_user VARCHAR(10)
+ADD date_last_modification DATE
+ADD user_last_modification VARCHAR(10);
+
+
+
+CREATE OR REPLACE TRIGGER pe.beforeInsertpbo
+BEFORE INSERT
+ON pe.personborrowsobject
+FOR EACH ROW
+BEGIN
+    :new.creation_date := SYSDATE;
+    :new.creation_user := USER;
+END beforeInsertpbo; 
+
+/
+
+CREATE OR REPLACE TRIGGER pe.beforeUPDATEpbo
+BEFORE UPDATE
+ON pe.personborrowsobject
+FOR EACH ROW
+BEGIN
+    :new.date_last_modification:= SYSDATE;
+    :new.user_last_modification:= USER;
+END beforeUPDATEpbo; 

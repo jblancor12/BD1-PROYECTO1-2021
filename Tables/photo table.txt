@@ -1,0 +1,58 @@
+CREATE TABLE photo(
+    id_photo NUMBER(8) CONSTRAINT id_photo_nn NOT NULL,
+    description VARCHAR2(45) CONSTRAINT photo_description_nn NOT NULL
+);
+
+/*==================================================COMENTARIOS EN TABLAS Y COLUMNAS======================================================*/
+
+COMMENT ON TABLE photo
+IS 'Repository to store info about book pictures.';
+
+/*==================================================CREACIÃ“N DE LLAVES PRIMARIAS======================================================*/
+
+ALTER TABLE photo
+ADD CONSTRAINT pk_photo PRIMARY KEY (id_photo)
+USING INDEX 
+TABLESPACE pe_ind PCTFREE 20
+STORAGE (INITIAL 10k NEXT 10K PCTINCREASE 0);
+
+/*==================================================CAMPOS DE AUDITORÃ�A PARA TABLAS======================================================*/
+
+ALTER TABLE photo
+ADD creation_date DATE
+ADD creation_user VARCHAR(10)
+ADD date_last_modification DATE
+ADD user_last_modification VARCHAR(10);
+
+/*==================================================CREACIÃ“N DE SECUENCIAS PARA TABLAS======================================================*/
+
+CREATE SEQUENCE s_photo
+START WITH 0
+INCREMENT BY 1
+MINVALUE 0
+MAXVALUE 999999999999
+NOCACHE
+NOCYCLE;
+
+/*==================================================CREACIÃ“N DE TRIGGERS PARA TABLAS======================================================*/
+
+CREATE OR REPLACE TRIGGER pe.beforeInsertPhoto
+BEFORE INSERT
+ON pe.photo
+FOR EACH ROW
+BEGIN
+	:new.id_photo := s_photo.nextval;
+    :new.creation_date := SYSDATE;
+    :new.creation_user := USER;
+END beforeInsertPhoto; 
+
+/
+
+CREATE OR REPLACE TRIGGER pe.beforeUpdatePhoto
+BEFORE UPDATE
+ON pe.photo
+FOR EACH ROW
+BEGIN
+    :new.date_last_modification:= SYSDATE;
+    :new.user_last_modification:= USER;
+END beforeUpdatePhoto; 

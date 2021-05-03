@@ -1,0 +1,58 @@
+CREATE TABLE bookedition(
+    id_edition NUMBER(8) CONSTRAINT id_edition_nn NOT NULL,
+    description VARCHAR2(45) CONSTRAINT edition_decription_nn NOT NULL
+);
+
+/*==================================================COMENTARIOS EN TABLAS Y COLUMNAS======================================================*/
+
+COMMENT ON TABLE bookedition
+IS 'Repository to store info about book editions.';
+
+/*==================================================CREACIÃ“N DE LLAVES PRIMARIAS======================================================*/
+
+ALTER TABLE bookedition
+ADD CONSTRAINT pk_edition PRIMARY KEY (id_edition)
+USING INDEX 
+TABLESPACE pe_ind PCTFREE 20
+STORAGE (INITIAL 10k NEXT 10K PCTINCREASE 0);
+
+/*==================================================CAMPOS DE AUDITORÃ�A PARA TABLAS======================================================*/
+
+ALTER TABLE bookedition
+ADD creation_date DATE
+ADD creation_user VARCHAR(10)
+ADD date_last_modification DATE
+ADD user_last_modification VARCHAR(10);
+
+/*==================================================CREACIÃ“N DE SECUENCIAS PARA TABLAS======================================================*/
+
+CREATE SEQUENCE s_edition
+START WITH 0
+INCREMENT BY 1
+MINVALUE 0
+MAXVALUE 999999999999
+NOCACHE
+NOCYCLE;
+
+/*==================================================CREACIÃ“N DE TRIGGERS PARA TABLAS======================================================*/
+
+CREATE OR REPLACE TRIGGER pe.beforeInsertEdition
+BEFORE INSERT
+ON pe.bookedition
+FOR EACH ROW
+BEGIN
+	:new.id_edition := s_edition.nextval;
+    :new.creation_date := SYSDATE;
+    :new.creation_user := USER;
+END beforeInsertEdition; 
+
+/
+
+CREATE OR REPLACE TRIGGER pe.beforeUpdateEdition
+BEFORE UPDATE
+ON pe.bookedition
+FOR EACH ROW
+BEGIN
+    :new.date_last_modification:= SYSDATE;
+    :new.user_last_modification:= USER;
+END beforeUpdateEdition; 

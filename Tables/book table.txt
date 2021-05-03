@@ -1,0 +1,79 @@
+CREATE TABLE book(
+    id_book NUMBER(8) CONSTRAINT id_book_nn NOT NULL,
+    title VARCHAR2(45) CONSTRAINT book_title_nn NOT NULL,
+    id_book_edition NUMBER(10) CONSTRAINT book_edition_nn NOT NULL,
+    id_editorial NUMBER(10) CONSTRAINT book_editorial_nn NOT NULL,
+    id_calification NUMBER(10),
+    id_photo NUMBER(10)
+);
+
+/*==================================================COMENTARIOS EN TABLAS Y COLUMNAS======================================================*/
+
+COMMENT ON TABLE book
+IS 'Repository to store info about books.';
+
+/*==================================================CREACIÃ“N DE LLAVES PRIMARIAS======================================================*/
+
+ALTER TABLE book
+ADD CONSTRAINT pk_book PRIMARY KEY (id_book)
+USING INDEX 
+TABLESPACE pe_ind PCTFREE 20
+STORAGE (INITIAL 10k NEXT 10K PCTINCREASE 0);
+
+
+ALTER TABLE book
+ADD CONSTRAINT fk_book_edition FOREIGN KEY
+(id_book_edition) REFERENCES bookedition(id_edition);
+
+ALTER TABLE book
+ADD CONSTRAINT fk_book_editorial FOREIGN KEY
+(id_editorial) REFERENCES editorial(id_editorial);
+
+ALTER TABLE book
+ADD CONSTRAINT fk_book_calification FOREIGN KEY
+(id_calification) REFERENCES calification(id_calification);
+
+ALTER TABLE book
+ADD CONSTRAINT fk_book_photo FOREIGN KEY
+(id_photo) REFERENCES photo(id_photo);
+
+/*==================================================CAMPOS DE AUDITORÃ�A PARA TABLAS======================================================*/
+
+ALTER TABLE book
+ADD creation_date DATE
+ADD creation_user VARCHAR(10)
+ADD date_last_modification DATE
+ADD user_last_modification VARCHAR(10);
+
+/*==================================================CREACIÃ“N DE SECUENCIAS PARA TABLAS======================================================*/
+
+CREATE SEQUENCE s_book
+START WITH 0
+INCREMENT BY 1
+MINVALUE 0
+MAXVALUE 999999999999
+NOCACHE
+NOCYCLE;
+
+/*==================================================CREACIÃ“N DE TRIGGERS PARA TABLAS======================================================*/
+
+CREATE OR REPLACE TRIGGER pe.beforeInsertBook
+BEFORE INSERT
+ON pe.book
+FOR EACH ROW
+BEGIN
+	:new.id_book := s_book.nextval;
+    :new.creation_date := SYSDATE;
+    :new.creation_user := USER;
+END beforeInsertBook; 
+
+/
+
+CREATE OR REPLACE TRIGGER pe.beforeUpdateBook
+BEFORE UPDATE
+ON pe.book
+FOR EACH ROW
+BEGIN
+    :new.date_last_modification:= SYSDATE;
+    :new.user_last_modification:= USER;
+END beforeUpdateBook; 

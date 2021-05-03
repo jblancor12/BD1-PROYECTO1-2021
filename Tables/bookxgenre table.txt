@@ -1,0 +1,50 @@
+CREATE TABLE bookXGenre(
+    id_book NUMBER(10),
+    id_genre NUMBER(10)
+);
+
+
+ALTER TABLE bookXgenre
+ADD CONSTRAINT pk_bookXgenre PRIMARY KEY (id_book, id_genre)
+USING INDEX 
+TABLESPACE pe_ind PCTFREE 20
+STORAGE (INITIAL 10K NEXT 10K PCTINCREASE 0);
+
+
+ALTER TABLE bookXgenre
+ADD CONSTRAINT fk_bookxgenre_book FOREIGN KEY
+(id_book) REFERENCES book(id_book);
+
+
+ALTER TABLE bookXgenre
+ADD CONSTRAINT fk_bookxgenre_genre FOREIGN KEY
+(id_genre) REFERENCES genre(id_genre);
+
+
+ALTER TABLE bookXgenre
+ADD creation_date DATE
+ADD creation_user VARCHAR(10)
+ADD date_last_modification DATE
+ADD user_last_modification VARCHAR(10);
+
+
+
+CREATE OR REPLACE TRIGGER pe.beforeInsertbxg
+BEFORE INSERT
+ON pe.bookxgenre
+FOR EACH ROW
+BEGIN
+    :new.creation_date := SYSDATE;
+    :new.creation_user := USER;
+END beforeInsertbxg; 
+
+/
+
+CREATE OR REPLACE TRIGGER pe.beforeUPDATEbxg
+BEFORE UPDATE
+ON pe.bookxgenre
+FOR EACH ROW
+BEGIN
+    :new.date_last_modification:= SYSDATE;
+    :new.user_last_modification:= USER;
+END beforeUPDATEbxg; 

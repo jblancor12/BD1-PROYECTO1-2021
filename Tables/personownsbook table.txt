@@ -1,0 +1,50 @@
+CREATE TABLE personownsbook(
+    id_book NUMBER(10),
+    id_person NUMBER(10)
+);
+
+
+ALTER TABLE personownsbook
+ADD CONSTRAINT pk_pob PRIMARY KEY (id_book, id_person)
+USING INDEX 
+TABLESPACE pe_ind PCTFREE 20
+STORAGE (INITIAL 10K NEXT 10K PCTINCREASE 0);
+
+
+ALTER TABLE personownsbook
+ADD CONSTRAINT fk_pob_book FOREIGN KEY
+(id_book) REFERENCES book(id_book);
+
+
+ALTER TABLE personownsbook
+ADD CONSTRAINT fk_pob_person FOREIGN KEY
+(id_person) REFERENCES person(id_person);
+
+
+ALTER TABLE personownsbook
+ADD creation_date DATE
+ADD creation_user VARCHAR(10)
+ADD date_last_modification DATE
+ADD user_last_modification VARCHAR(10);
+
+
+
+CREATE OR REPLACE TRIGGER pe.beforeInsertpob
+BEFORE INSERT
+ON pe.personownsbook
+FOR EACH ROW
+BEGIN
+    :new.creation_date := SYSDATE;
+    :new.creation_user := USER;
+END beforeInsertpob; 
+
+/
+
+CREATE OR REPLACE TRIGGER pe.beforeUPDATEpob
+BEFORE UPDATE
+ON pe.personownsbook
+FOR EACH ROW
+BEGIN
+    :new.date_last_modification:= SYSDATE;
+    :new.user_last_modification:= USER;
+END beforeUPDATEpob; 
