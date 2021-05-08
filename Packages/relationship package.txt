@@ -1,0 +1,108 @@
+Create or replace package control_relationship is
+PROCEDURE insert_relationship (pdescription IN VARCHAR2);
+PROCEDURE remove_relationship (pid_relationship IN NUMBER);
+PROCEDURE u_relationship_description(pid_relationship IN NUMBER, pdescription IN VARCHAR2);
+FUNCTION getrelationshipdescription(pid_relationship IN NUMBER) RETURN VARCHAR2;
+FUNCTION get_relationship_id(pdescription varchar2) return number;
+end control_relationship;
+/
+CREATE OR REPLACE PACKAGE BODY control_relationship IS
+
+PROCEDURE insert_relationship (pdescription IN VARCHAR2) AS
+BEGIN
+	INSERT INTO relationship(description)
+	VALUES(pdescription);
+END insert_relationship;
+
+PROCEDURE remove_relationship (pid_relationship IN NUMBER) AS
+e_invalid_relationship EXCEPTION;
+BEGIN
+	DELETE FROM relationship
+	WHERE id_relationship = pid_relationship;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_relationship;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_relationship THEN
+        DBMS_OUTPUT.PUT_LINE('No such relationship.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to remove.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END remove_relationship;
+
+
+PROCEDURE u_relationship_description(pid_relationship IN NUMBER, pdescription IN VARCHAR2) AS
+e_invalid_relationship EXCEPTION;
+BEGIN
+	UPDATE relationship
+	SET description = pdescription
+	WHERE id_relationship = pid_relationship;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_relationship;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_relationship THEN
+        DBMS_OUTPUT.PUT_LINE('No such relationship.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END u_relationship_description;
+
+
+FUNCTION getrelationshipdescription(pid_relationship IN NUMBER) RETURN VARCHAR2
+IS 
+    vcdescription VARCHAR2(50);
+    BEGIN
+        SELECT description
+        INTO vcdescription
+        FROM relationship
+        WHERE id_relationship = pid_relationship;
+        RETURN (vcdescription);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the description||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+    
+    
+    
+    
+FUNCTION get_relationship_id(pdescription varchar2) return number
+
+IS 
+    vcID VARCHAR2(50);
+    BEGIN
+        SELECT id_relationship
+        INTO vcID
+        FROM relationship
+        WHERE description = pdescription;
+        RETURN (vcID);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the description||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+end control_relationship;
+

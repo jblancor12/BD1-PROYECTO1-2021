@@ -1,0 +1,108 @@
+Create or replace package control_object_type is
+PROCEDURE insert_object_type (pdescription IN VARCHAR2);
+PROCEDURE remove_object_type (pid_object_type IN NUMBER);
+PROCEDURE update_object_type_description(pid_object_type IN NUMBER, pdescription IN VARCHAR2);
+FUNCTION getobject_typedescription(pid_object_type IN NUMBER) RETURN VARCHAR2;
+FUNCTION get_object_type_id(pdescription varchar2) return number;
+end control_object_type;
+/
+CREATE OR REPLACE PACKAGE BODY control_object_type IS
+
+PROCEDURE insert_object_type (pdescription IN VARCHAR2) AS
+BEGIN
+	INSERT INTO object_type(description)
+	VALUES(pdescription);
+END insert_object_type;
+
+PROCEDURE remove_object_type (pid_object_type IN NUMBER) AS
+e_invalid_object_type EXCEPTION;
+BEGIN
+	DELETE FROM object_type
+	WHERE id_object_type = pid_object_type;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_object_type;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_object_type THEN
+        DBMS_OUTPUT.PUT_LINE('No such object_type.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to remove.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END remove_object_type;
+
+
+PROCEDURE update_object_type_description(pid_object_type IN NUMBER, pdescription IN VARCHAR2) AS
+e_invalid_object_type EXCEPTION;
+BEGIN
+	UPDATE object_type
+	SET description = pdescription
+	WHERE id_object_type = pid_object_type;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_object_type;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_object_type THEN
+        DBMS_OUTPUT.PUT_LINE('No such object_type.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END update_object_type_description;
+
+
+FUNCTION getobject_typedescription(pid_object_type IN NUMBER) RETURN VARCHAR2
+IS 
+    vcdescription VARCHAR2(50);
+    BEGIN
+        SELECT description
+        INTO vcdescription
+        FROM object_type
+        WHERE id_object_type = pid_object_type;
+        RETURN (vcdescription);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the description||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+    
+    
+    
+    
+FUNCTION get_object_type_id(pdescription varchar2) return number
+
+IS 
+    vcID VARCHAR2(50);
+    BEGIN
+        SELECT id_object_type
+        INTO vcID
+        FROM object_type
+        WHERE description = pdescription;
+        RETURN (vcID);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the description||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+end control_object_type;
+

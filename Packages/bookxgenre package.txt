@@ -1,0 +1,131 @@
+create or replace package control_bookxgenre is
+PROCEDURE insert_bookxgenre (pid_genre IN NUMBER, pid_book NUMBER);
+PROCEDURE remove_bookxgenre (pid_genre IN NUMBER,pid_book in NUMBER);
+PROCEDURE update_bxg_id_genre(pid_genre IN NUMBER, pnewid NUMBER);
+PROCEDURE update_bxg_id_book(pid_book IN NUMBER, pnewid NUMBER);
+FUNCTION getbookxgenreIdgenre(pid_book IN NUMBER) RETURN NUMBER;
+FUNCTION getbookxgenreIdbook(pid_genre IN NUMBER) RETURN NUMBER;
+
+
+end control_bookxgenre;
+/
+create or replace PACKAGE BODY control_bookxgenre IS
+
+PROCEDURE insert_bookxgenre (pid_genre IN NUMBER, pid_book NUMBER)AS
+begin
+    insert into bookxgenre(id_genre,id_book)
+    values (pid_genre,pid_book);
+    commit;
+end insert_bookxgenre;
+
+
+PROCEDURE remove_bookxgenre (pid_genre IN NUMBER, pid_book IN NUMBER)AS
+e_invalid_exc EXCEPTION;
+begin
+    delete from bookxgenre
+    where id_genre= pid_genre AND id_book = pid_book;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to remove.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end remove_bookxgenre;
+
+PROCEDURE update_bxg_id_genre(pid_genre IN NUMBER, pnewid NUMBER)AS
+e_invalid_exc EXCEPTION;
+begin
+    update bookxgenre
+    set id_genre=pnewid
+    where id_genre=pid_genre;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end update_bxg_id_genre;
+
+PROCEDURE update_bxg_id_book(pid_book IN NUMBER, pnewid NUMBER)AS
+e_invalid_exc EXCEPTION;
+begin
+    update bookxgenre
+    set id_book=pnewid
+    where id_book=pid_book;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end update_bxg_id_book;
+
+
+
+FUNCTION getbookxgenreIdgenre(pid_book IN NUMBER) RETURN NUMBER
+is vcName number(30);
+begin
+    select id_genre
+    into vcName
+    from bookxgenre
+    where id_book=pid_book ;
+    return (VCNAME);
+    EXCEPTION
+        WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+        WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pId.');
+        WHEN STORAGE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+        WHEN VALUE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+        WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+END;
+
+
+FUNCTION getbookxgenreIdbook(pid_genre IN NUMBER) RETURN NUMBER
+is vcID NUMBER(10);
+begin
+    select id_book
+    into vcID 
+    from bookxgenre
+    where id_genre=pid_genre;
+    return vcID;
+    EXCEPTION
+        WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+        WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pcanton.');
+        WHEN STORAGE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+        WHEN VALUE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+        WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+end;
+
+
+
+END control_bookxgenre;

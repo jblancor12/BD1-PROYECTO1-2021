@@ -1,0 +1,108 @@
+Create or replace package control_author is
+PROCEDURE insert_author (pname IN VARCHAR2);
+PROCEDURE remove_author (pid_author IN NUMBER);
+PROCEDURE update_author_name(pid_author IN NUMBER, pname IN VARCHAR2);
+FUNCTION getauthorname(pid_author IN NUMBER) RETURN VARCHAR2;
+FUNCTION get_author_id(pname varchar2) return number;
+end control_author;
+/
+CREATE OR REPLACE PACKAGE BODY control_author IS
+
+PROCEDURE insert_author (pname IN VARCHAR2) AS
+BEGIN
+	INSERT INTO author(name)
+	VALUES(pname);
+END insert_author;
+
+PROCEDURE remove_author (pid_author IN NUMBER) AS
+e_invalid_author EXCEPTION;
+BEGIN
+	DELETE FROM author
+	WHERE id_author = pid_author;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_author;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_author THEN
+        DBMS_OUTPUT.PUT_LINE('No such author.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to remove.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END remove_author;
+
+
+PROCEDURE update_author_name(pid_author IN NUMBER, pname IN VARCHAR2) AS
+e_invalid_author EXCEPTION;
+BEGIN
+	UPDATE author
+	SET name = pname
+	WHERE id_author = pid_author;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_author;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_author THEN
+        DBMS_OUTPUT.PUT_LINE('No such author.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END update_author_name;
+
+
+FUNCTION getauthorname(pid_author IN NUMBER) RETURN VARCHAR2
+IS 
+    vcname VARCHAR2(50);
+    BEGIN
+        SELECT name
+        INTO vcname
+        FROM author
+        WHERE id_author = pid_author;
+        RETURN (vcname);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+    
+    
+    
+    
+FUNCTION get_author_id(pname varchar2) return number
+
+IS 
+    vcID VARCHAR2(50);
+    BEGIN
+        SELECT id_author
+        INTO vcID
+        FROM author
+        WHERE name = pname;
+        RETURN (vcID);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+end control_author;
+

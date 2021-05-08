@@ -1,0 +1,134 @@
+Create or replace package control_calification is
+PROCEDURE insert_calification (pscore IN NUMBER);
+PROCEDURE remove_calification (pid_calification IN NUMBER);
+PROCEDURE update_calification_score(pid_calification IN NUMBER, pscore IN NUMBER);
+FUNCTION getcalificationscore(pid_calification IN NUMBER) RETURN NUMBER;
+FUNCTION get_calification_id(pscore NUMBER) return number;
+end control_calification;
+/
+CREATE OR REPLACE PACKAGE BODY control_calification IS
+
+PROCEDURE insert_calification (pscore IN NUMBER) AS
+BEGIN
+	INSERT INTO calification(score)
+	VALUES(pscore);
+END insert_calification;
+
+PROCEDURE remove_calification (pid_calification IN NUMBER) AS
+e_invalid_calification EXCEPTION;
+BEGIN
+	DELETE FROM calification
+	WHERE id_calification = pid_calification;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_calification;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_calification THEN
+        DBMS_OUTPUT.PUT_LINE('No such calification.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to remove.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END remove_calification;
+
+
+PROCEDURE update_calification_score(pid_calification IN NUMBER, pscore IN NUMBER) AS
+e_invalid_calification EXCEPTION;
+BEGIN
+	UPDATE calification
+	SET score = pscore
+	WHERE id_calification = pid_calification;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_calification;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_calification THEN
+        DBMS_OUTPUT.PUT_LINE('No such calification.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END update_calification_score;
+
+
+FUNCTION getcalificationscore(pid_calification IN NUMBER) RETURN NUMBER
+IS 
+    vcscore NUMBER(20);
+    BEGIN
+        SELECT score
+        INTO vcscore
+        FROM calification
+        WHERE id_calification = pid_calification;
+        RETURN (vcscore);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the score||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+    
+    
+    
+    
+FUNCTION get_calification_id(pscore NUMBER) return number
+
+IS 
+    vcID NUMBER(20);
+    BEGIN
+        SELECT id_calification
+        INTO vcID
+        FROM calification
+        WHERE score = pscore;
+        RETURN (vcID);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the score||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+end control_calification;
+
+    
+    
+    
+FUNCTION get_calification_id(pscore varchar2) return number
+
+IS 
+    vcID VARCHAR2(50);
+    BEGIN
+        SELECT id_calification
+        INTO vcID
+        FROM calification
+        WHERE score = pscore;
+        RETURN (vcID);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the score||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+end control_calification;

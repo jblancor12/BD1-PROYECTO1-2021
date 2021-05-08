@@ -1,0 +1,108 @@
+
+Create or replace package control_bookedition is
+PROCEDURE insert_bookedition (pdescription IN VARCHAR2);
+PROCEDURE remove_bookedition (pid_edition IN NUMBER);
+PROCEDURE update_bookedition_description(pid_edition IN NUMBER, pdescription IN VARCHAR2);
+FUNCTION getbookeditiondescription(pid_edition IN NUMBER) RETURN VARCHAR2;
+FUNCTION get_bookedition_id(pdescription varchar2) return number;
+end control_bookedition;
+/
+CREATE OR REPLACE PACKAGE BODY control_bookedition IS
+
+PROCEDURE insert_bookedition (pdescription IN VARCHAR2) AS
+BEGIN
+	INSERT INTO bookedition(description)
+	VALUES(pdescription);
+END insert_bookedition;
+
+PROCEDURE remove_bookedition (pid_edition IN NUMBER) AS
+e_invalid_edition EXCEPTION;
+BEGIN
+	DELETE FROM bookedition
+	WHERE id_edition = pid_edition;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_edition;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_edition THEN
+        DBMS_OUTPUT.PUT_LINE('No such bookedition.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to remove.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END remove_bookedition;
+
+
+PROCEDURE update_bookedition_description(pid_edition IN NUMBER, pdescription IN VARCHAR2) AS
+e_invalid_edition EXCEPTION;
+BEGIN
+	UPDATE bookedition
+	SET description = pdescription
+	WHERE id_edition = pid_edition;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_edition;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_edition THEN
+        DBMS_OUTPUT.PUT_LINE('No such bookedition.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END update_bookedition_description;
+
+
+FUNCTION getbookeditiondescription(pid_edition IN NUMBER) RETURN VARCHAR2
+IS 
+    vcdescription VARCHAR2(50);
+    BEGIN
+        SELECT description
+        INTO vcdescription
+        FROM bookedition
+        WHERE id_edition = pid_edition;
+        RETURN (vcdescription);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the description||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+    
+    
+    
+    
+FUNCTION get_bookedition_id(pdescription varchar2) return number
+
+IS 
+    vcID VARCHAR2(50);
+    BEGIN
+        SELECT id_edition
+        INTO vcID
+        FROM bookedition
+        WHERE description = pdescription;
+        RETURN (vcID);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the description||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+end control_bookedition;

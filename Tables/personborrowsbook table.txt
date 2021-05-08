@@ -7,6 +7,7 @@ CREATE TABLE personborrowsbook(
 );
 
 
+
 ALTER TABLE personborrowsbook
 ADD CONSTRAINT pk_pbb PRIMARY KEY (id_book, id_person)
 USING INDEX 
@@ -26,6 +27,9 @@ ADD CONSTRAINT fk_pbb_person FOREIGN KEY
 ALTER TABLE personborrowsbook
 ADD CONSTRAINT fk_pbb_relationship FOREIGN KEY
 (id_relationship) REFERENCES relationship(id_relationship);
+
+ALTER TABLE personborrowsbook
+DROP COLUMN id_relationship;
 
 ALTER TABLE personborrowsbook
 ADD creation_date DATE

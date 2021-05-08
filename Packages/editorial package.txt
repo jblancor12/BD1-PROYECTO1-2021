@@ -1,0 +1,109 @@
+Create or replace package control_editorial is
+PROCEDURE insert_editorial (pdescription IN VARCHAR2);
+PROCEDURE remove_editorial (pid_editorial IN NUMBER);
+PROCEDURE update_editorial_description(pid_editorial IN NUMBER, pdescription IN VARCHAR2);
+FUNCTION geteditorialdescription(pid_editorial IN NUMBER) RETURN VARCHAR2;
+FUNCTION get_editorial_id(pdescription varchar2) return number;
+end control_editorial;
+/
+CREATE OR REPLACE PACKAGE BODY control_editorial IS
+
+PROCEDURE insert_editorial (pdescription IN VARCHAR2) AS
+BEGIN
+	INSERT INTO editorial(description)
+	VALUES(pdescription);
+END insert_editorial;
+
+PROCEDURE remove_editorial (pid_editorial IN NUMBER) AS
+e_invalid_editorial EXCEPTION;
+BEGIN
+	DELETE FROM editorial
+	WHERE id_editorial = pid_editorial;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_editorial;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_editorial THEN
+        DBMS_OUTPUT.PUT_LINE('No such editorial.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to remove.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END remove_editorial;
+
+
+PROCEDURE update_editorial_description(pid_editorial IN NUMBER, pdescription IN VARCHAR2) AS
+e_invalid_editorial EXCEPTION;
+BEGIN
+	UPDATE editorial
+	SET description = pdescription
+	WHERE id_editorial = pid_editorial;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_editorial;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_editorial THEN
+        DBMS_OUTPUT.PUT_LINE('No such editorial.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END update_editorial_description;
+
+
+FUNCTION geteditorialdescription(pid_editorial IN NUMBER) RETURN VARCHAR2
+IS 
+    vcdescription VARCHAR2(50);
+    BEGIN
+        SELECT description
+        INTO vcdescription
+        FROM editorial
+        WHERE id_editorial = pid_editorial;
+        RETURN (vcdescription);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the description||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+    
+    
+    
+    
+FUNCTION get_editorial_id(pdescription varchar2) return number
+
+IS 
+    vcID VARCHAR2(50);
+    BEGIN
+        SELECT id_editorial
+        INTO vcID
+        FROM editorial
+        WHERE description = pdescription;
+        RETURN (vcID);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the description||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+end control_editorial;
+
+

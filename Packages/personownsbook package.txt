@@ -1,0 +1,131 @@
+create or replace package control_personownsbook is
+PROCEDURE insert_personownsbook (pid_book IN NUMBER, pid_person NUMBER);
+PROCEDURE remove_personownsbook (pid_book IN NUMBER,pid_person in NUMBER);
+PROCEDURE update_bxg_id_book(pid_book IN NUMBER, pnewid NUMBER);
+PROCEDURE update_bxg_id_person(pid_person IN NUMBER, pnewid NUMBER);
+FUNCTION getpersonownsbookIdbook(pid_person IN NUMBER) RETURN NUMBER;
+FUNCTION getpersonownsbookIdperson(pid_book IN NUMBER) RETURN NUMBER;
+
+
+end control_personownsbook;
+/
+create or replace PACKAGE BODY control_personownsbook IS
+
+PROCEDURE insert_personownsbook (pid_book IN NUMBER, pid_person NUMBER)AS
+begin
+    insert into personownsbook(id_book,id_person)
+    values (pid_book,pid_person);
+    commit;
+end insert_personownsbook;
+
+
+PROCEDURE remove_personownsbook (pid_book IN NUMBER, pid_person IN NUMBER)AS
+e_invalid_exc EXCEPTION;
+begin
+    delete from personownsbook
+    where id_book= pid_book AND id_person = pid_person;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to remove.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end remove_personownsbook;
+
+PROCEDURE update_bxg_id_book(pid_book IN NUMBER, pnewid NUMBER)AS
+e_invalid_exc EXCEPTION;
+begin
+    update personownsbook
+    set id_book=pnewid
+    where id_book=pid_book;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end update_bxg_id_book;
+
+PROCEDURE update_bxg_id_person(pid_person IN NUMBER, pnewid NUMBER)AS
+e_invalid_exc EXCEPTION;
+begin
+    update personownsbook
+    set id_person=pnewid
+    where id_person=pid_person;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end update_bxg_id_person;
+
+
+
+FUNCTION getpersonownsbookIdbook(pid_person IN NUMBER) RETURN NUMBER
+is vcName number(30);
+begin
+    select id_book
+    into vcName
+    from personownsbook
+    where id_person=pid_person ;
+    return (VCNAME);
+    EXCEPTION
+        WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+        WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pId.');
+        WHEN STORAGE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+        WHEN VALUE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+        WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+END;
+
+
+FUNCTION getpersonownsbookIdperson(pid_book IN NUMBER) RETURN NUMBER
+is vcID NUMBER(10);
+begin
+    select id_person
+    into vcID 
+    from personownsbook
+    where id_book=pid_book;
+    return vcID;
+    EXCEPTION
+        WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+        WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pcanton.');
+        WHEN STORAGE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+        WHEN VALUE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+        WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+end;
+
+
+
+END control_personownsbook;

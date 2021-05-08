@@ -1,0 +1,109 @@
+Create or replace package control_newobject is
+PROCEDURE insert_newobject (pdescription IN VARCHAR2);
+PROCEDURE remove_newobject (pid_object IN NUMBER);
+PROCEDURE update_newobject_description(pid_object IN NUMBER, pdescription IN VARCHAR2);
+FUNCTION getnewobjectdescription(pid_object IN NUMBER) RETURN VARCHAR2;
+FUNCTION get_newobject_id(pdescription varchar2) return number;
+end control_newobject;
+/
+CREATE OR REPLACE PACKAGE BODY control_newobject IS
+
+PROCEDURE insert_newobject (pdescription IN VARCHAR2) AS
+BEGIN
+	INSERT INTO newobject(description)
+	VALUES(pdescription);
+END insert_newobject;
+
+PROCEDURE remove_newobject (pid_object IN NUMBER) AS
+e_invalid_object EXCEPTION;
+BEGIN
+	DELETE FROM newobject
+	WHERE id_object = pid_object;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_object;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_object THEN
+        DBMS_OUTPUT.PUT_LINE('No such newobject.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to remove.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END remove_newobject;
+
+
+PROCEDURE update_newobject_description(pid_object IN NUMBER, pdescription IN VARCHAR2) AS
+e_invalid_object EXCEPTION;
+BEGIN
+	UPDATE newobject
+	SET description = pdescription
+	WHERE id_object = pid_object;
+	COMMIT;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_object;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_object THEN
+        DBMS_OUTPUT.PUT_LINE('No such newobject.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+END update_newobject_description;
+
+
+FUNCTION getnewobjectdescription(pid_object IN NUMBER) RETURN VARCHAR2
+IS 
+    vcdescription VARCHAR2(50);
+    BEGIN
+        SELECT description
+        INTO vcdescription
+        FROM newobject
+        WHERE id_object = pid_object;
+        RETURN (vcdescription);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the description||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+    
+    
+    
+    
+FUNCTION get_newobject_id(pdescription varchar2) return number
+
+IS 
+    vcID VARCHAR2(50);
+    BEGIN
+        SELECT id_object
+        INTO vcID
+        FROM newobject
+        WHERE description = pdescription;
+        RETURN (vcID);
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the description||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+    END;
+end control_newobject;
+
+

@@ -1,6 +1,6 @@
 CREATE TABLE object_type(
     id_object_type NUMBER(8) CONSTRAINT id_object_type_nn NOT NULL,
-    description VARCHAR2(45) CONSTRAINT object_type_description_nn NOT NULL
+    score NUMBER(10) CONSTRAINT object_type_score_nn NOT NULL
 );
 
 /*==================================================COMENTARIOS EN TABLAS Y COLUMNAS======================================================*/

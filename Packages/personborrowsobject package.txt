@@ -1,0 +1,213 @@
+create or replace package control_personborrowsobject is
+PROCEDURE insert_personborrowsobject (pid_person IN NUMBER, pid_object NUMBER);
+PROCEDURE remove_personborrowsobject (pid_person IN NUMBER,pid_object in NUMBER);
+PROCEDURE update_pbo_id_person(pid_person IN NUMBER, pnewid NUMBER);
+PROCEDURE update_pbo_id_object(pid_object IN NUMBER, pnewid NUMBER);
+PROCEDURE update_pbo_loan_date(ploan_date DATE, pdate DATE);
+PROCEDURE update_pbo_return_date(preturn_date DATE, pdate DATE);
+FUNCTION getpboIdperson(pid_object IN NUMBER) RETURN NUMBER;
+FUNCTION getpboIdobject(pid_person IN NUMBER) RETURN NUMBER;
+FUNCTION getpboloan_date(pid_person IN NUMBER, pid_object IN NUMBER) RETURN DATE;
+FUNCTION getpboreturn_date(pid_person IN NUMBER, pid_object IN NUMBER) RETURN DATE;
+end control_personborrowsobject;
+/
+create or replace PACKAGE BODY control_personborrowsobject IS
+
+PROCEDURE insert_personborrowsobject (pid_person IN NUMBER, pid_object NUMBER)AS
+begin
+    insert into personborrowsobject(id_person,id_object)
+    values (pid_person,pid_object);
+    commit;
+end insert_personborrowsobject;
+
+
+PROCEDURE remove_personborrowsobject (pid_person IN NUMBER, pid_object IN NUMBER)AS
+e_invalid_exc EXCEPTION;
+begin
+    delete from personborrowsobject
+    where id_person= pid_person AND id_object = pid_object;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to remove.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end remove_personborrowsobject;
+
+PROCEDURE update_pbo_id_person(pid_person IN NUMBER, pnewid NUMBER)AS
+e_invalid_exc EXCEPTION;
+begin
+    update personborrowsobject
+    set id_person=pnewid
+    where id_person=pid_person;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end update_pbo_id_person;
+
+PROCEDURE update_pbo_id_object(pid_object IN NUMBER, pnewid NUMBER)AS
+e_invalid_exc EXCEPTION;
+begin
+    update personborrowsobject
+    set id_object=pnewid
+    where id_object=pid_object;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end update_pbo_id_object;
+
+
+PROCEDURE update_pbo_loan_date(ploan_date DATE, pdate DATE)AS
+e_invalid_exc EXCEPTION;
+begin
+    update personborrowsobject
+    set loan_date=pdate
+    where loan_date=ploan_date;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end update_pbo_loan_date;
+PROCEDURE update_pbo_return_date(preturn_date DATE, pdate DATE)AS
+e_invalid_exc EXCEPTION;
+begin
+    update personborrowsobject
+    set return_date=pdate
+    where return_date=preturn_date;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end update_pbo_return_date;
+
+FUNCTION getpboIdperson(pid_object IN NUMBER) RETURN NUMBER
+is vcName number(30);
+begin
+    select id_person
+    into vcName
+    from personborrowsobject
+    where id_object=pid_object ;
+    return (VCNAME);
+    EXCEPTION
+        WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+        WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pId.');
+        WHEN STORAGE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+        WHEN VALUE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+        WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+END;
+
+
+FUNCTION getpboIdobject(pid_person IN NUMBER) RETURN NUMBER
+is vcID NUMBER(10);
+begin
+    select id_object
+    into vcID 
+    from personborrowsobject
+    where id_person=pid_person;
+    return vcID;
+    EXCEPTION
+        WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+        WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pcanton.');
+        WHEN STORAGE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+        WHEN VALUE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+        WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+end;
+
+
+FUNCTION getpboloan_date(pid_person IN NUMBER, pid_object IN NUMBER) RETURN DATE
+is vcID DATE;
+begin
+    select loan_date
+    into vcID 
+    from personborrowsobject
+    where id_person=pid_person AND id_object = pid_object;
+    return vcID;
+    EXCEPTION
+        WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+        WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pcanton.');
+        WHEN STORAGE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+        WHEN VALUE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+        WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+end;
+FUNCTION getpboreturn_date(pid_person IN NUMBER, pid_object IN NUMBER) RETURN DATE
+is vcID DATE;
+begin
+    select return_date
+    into vcID 
+    from personborrowsobject
+    where id_person=pid_person AND id_object = pid_object;
+    return vcID;
+    EXCEPTION
+        WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+        WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pcanton.');
+        WHEN STORAGE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+        WHEN VALUE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+        WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+end;
+
+END control_personborrowsobject;

@@ -1,0 +1,172 @@
+create or replace package control_personknowsperson is
+PROCEDURE insert_personknowsperson (pid_person1 IN NUMBER, pid_person2 NUMBER);
+PROCEDURE remove_personknowsperson (pid_person1 IN NUMBER,pid_person2 in NUMBER);
+PROCEDURE update_pkp_id_person1(pid_person1 IN NUMBER, pnewid NUMBER);
+PROCEDURE update_pkp_id_person2(pid_person2 IN NUMBER, pnewid NUMBER);
+PROCEDURE update_pkp_id_relationship(pid_relationship IN NUMBER, pnewid NUMBER);
+FUNCTION getpkpIdperson1(pid_person2 IN NUMBER) RETURN NUMBER;
+FUNCTION getpkpIdperson2(pid_person1 IN NUMBER) RETURN NUMBER;
+FUNCTION getpkpIdRelationship(pid_person1 IN NUMBER, pid_person2 IN NUMBER) RETURN NUMBER;
+end control_personknowsperson;
+/
+create or replace PACKAGE BODY control_personknowsperson IS
+
+PROCEDURE insert_personknowsperson (pid_person1 IN NUMBER, pid_person2 NUMBER)AS
+begin
+    insert into personknowsperson(id_person1,id_person2)
+    values (pid_person1,pid_person2);
+    commit;
+end insert_personknowsperson;
+
+
+PROCEDURE remove_personknowsperson (pid_person1 IN NUMBER, pid_person2 IN NUMBER)AS
+e_invalid_exc EXCEPTION;
+begin
+    delete from personknowsperson
+    where id_person1= pid_person1 AND id_person2 = pid_person2;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to remove.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end remove_personknowsperson;
+
+PROCEDURE update_pkp_id_person1(pid_person1 IN NUMBER, pnewid NUMBER)AS
+e_invalid_exc EXCEPTION;
+begin
+    update personknowsperson
+    set id_person1=pnewid
+    where id_person1=pid_person1;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end update_pkp_id_person1;
+
+PROCEDURE update_pkp_id_person2(pid_person2 IN NUMBER, pnewid NUMBER)AS
+e_invalid_exc EXCEPTION;
+begin
+    update personknowsperson
+    set id_person2=pnewid
+    where id_person2=pid_person2;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end update_pkp_id_person2;
+
+PROCEDURE update_pkp_id_relationship(pid_relationship IN NUMBER, pnewid NUMBER)AS
+e_invalid_exc EXCEPTION;
+begin
+    update personknowsperson
+    set id_relationship=pnewid
+    where id_relationship=pid_relationship;
+    commit;
+    IF SQL%NOTFOUND THEN 
+        RAISE e_invalid_exc;
+    END IF;
+    EXCEPTION
+    WHEN e_invalid_exc THEN
+        DBMS_OUTPUT.PUT_LINE('No such row.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+end update_pkp_id_relationship;
+
+
+
+FUNCTION getpkpIdperson1(pid_person2 IN NUMBER) RETURN NUMBER
+is vcName number(30);
+begin
+    select id_person1
+    into vcName
+    from personknowsperson
+    where id_person2=pid_person2 ;
+    return (VCNAME);
+    EXCEPTION
+        WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+        WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pId.');
+        WHEN STORAGE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+        WHEN VALUE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+        WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+END;
+
+
+FUNCTION getpkpIdperson2(pid_person1 IN NUMBER) RETURN NUMBER
+is vcID NUMBER(10);
+begin
+    select id_person2
+    into vcID 
+    from personknowsperson
+    where id_person1=pid_person1;
+    return vcID;
+    EXCEPTION
+        WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+        WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pcanton.');
+        WHEN STORAGE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+        WHEN VALUE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+        WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+end;
+
+FUNCTION getpkpIdRelationship(pid_person1 IN NUMBER, pid_person2 IN NUMBER) RETURN NUMBER
+IS vcID NUMBER(10);
+begin
+    select id_relationship
+    into vcID 
+    from personknowsperson
+    where id_person1=pid_person1 AND id_person2 = pid_person2;
+    return vcID;
+    EXCEPTION
+        WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+        WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pcanton.');
+        WHEN STORAGE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+        WHEN VALUE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+        WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+end;
+
+
+END control_personknowsperson;

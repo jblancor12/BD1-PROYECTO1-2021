@@ -28,6 +28,9 @@ ADD CONSTRAINT fk_pbo_relationship FOREIGN KEY
 (id_relationship) REFERENCES relationship(id_relationship);
 
 ALTER TABLE personborrowsobject
+DROP COLUMN id_relationship;
+
+ALTER TABLE personborrowsobject
 ADD creation_date DATE
 ADD creation_user VARCHAR(10)
 ADD date_last_modification DATE
