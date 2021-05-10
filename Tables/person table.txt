@@ -29,6 +29,14 @@ ADD creation_user VARCHAR(10)
 ADD date_last_modification DATE
 ADD user_last_modification VARCHAR(10);
 
+ALTER TABLE person
+ADD id_person_type NUMBER(8);
+
+
+ALTER TABLE person
+ADD CONSTRAINT fk_person_person_type FOREIGN KEY
+(id_person_type) REFERENCES person_type(id_person_type);
+
 /*==================================================CREACIÃ“N DE SECUENCIAS PARA TABLAS======================================================*/
 
 CREATE SEQUENCE s_person

@@ -1,0 +1,4 @@
+EXECUTE control_personborrowsobject.insert_personborrowsobject(0,0)
+EXECUTE control_personborrowsobject.insert_personborrowsobject(1,1)
+EXECUTE control_personborrowsobject.insert_personborrowsobject(2,2)
+EXECUTE control_personborrowsobject.insert_personborrowsobject(3,3)

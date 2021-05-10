@@ -1,0 +1,8 @@
+EXECUTE control_personborrowsbook.insert_personborrowsbook(4,0)
+EXECUTE control_personborrowsbook.insert_personborrowsbook(3,1)
+EXECUTE control_personborrowsbook.insert_personborrowsbook(3,2)
+EXECUTE control_personborrowsbook.insert_personborrowsbook(2,3)
+EXECUTE control_personborrowsbook.insert_personborrowsbook(1,4)
+
+
+

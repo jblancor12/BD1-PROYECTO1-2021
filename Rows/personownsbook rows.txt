@@ -1,0 +1,5 @@
+EXECUTE control_personownsbook.insert_personownsbook(0,1)
+EXECUTE control_personownsbook.insert_personownsbook(2,2)
+EXECUTE control_personownsbook.insert_personownsbook(1,4)
+EXECUTE control_personownsbook.insert_personownsbook(3,0)
+EXECUTE control_personownsbook.insert_personownsbook(4,3)

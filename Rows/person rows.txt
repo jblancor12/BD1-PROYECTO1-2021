@@ -1,2 +1,21 @@
-EXECUTE control_person.insert_user(116740176,'Luis Diego','Rodriguez',DATE '1997-04-11','ldrc161997@gmail.com','IDIR','ldrc10')
-EXECUTE control_person.insert_user(116740176,'Jose','Blanco',DATE '1998-07-07','jblanco@gmail.com','Guthix','jablan')
+EXECUTE control_person.insert_user(0,'Luis Diego','Rodriguez',DATE '1997-04-11','ldrc161997@gmail.com','IDIR','ldrc10')
+
+EXECUTE control_person.insert_user(1,'Jose','Blanco',DATE '1998-07-07','jblanco@gmail.com','Guthix','jablan')
+
+EXECUTE control_person.insert_user(2,'Paula','Rodriguez',DATE '1992-06-27','baula@gmail.com','baula','pau10')
+
+EXECUTE control_person.insert_user(3,'Tomas','Alvarado',DATE '1997-01-14','tief@gmail.com','tief','tief10')
+
+EXECUTE control_person.insert_user(4,'Nidia','Gonzalez',DATE '1977-11-14','nidus@gmail.com','nidus','nidus10')
+
+
+EXECUTE control_person.update_person_person_type(0,0)
+EXECUTE control_person.update_person_person_type(1,0)
+EXECUTE control_person.update_person_person_type(2,1)
+EXECUTE control_person.update_person_person_type(3,1)
+EXECUTE control_person.update_person_person_type(4,2)
+
+
+
+
+

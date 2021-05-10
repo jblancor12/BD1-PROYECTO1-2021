@@ -1,0 +1,4 @@
+EXECUTE control_personownsobject.insert_personownsobject(0,3)
+EXECUTE control_personownsobject.insert_personownsobject(1,2)
+EXECUTE control_personownsobject.insert_personownsobject(2,4)
+EXECUTE control_personownsobject.insert_personownsobject(3,1)

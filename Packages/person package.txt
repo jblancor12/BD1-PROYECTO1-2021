@@ -11,12 +11,14 @@ PROCEDURE update_person_birthday(pid_person IN NUMBER, pbirth_day IN DATE);
 PROCEDURE update_person_email(pid_person IN NUMBER, pemail IN VARCHAR2);
 PROCEDURE update_person_username(pid_person IN NUMBER, puser_name IN VARCHAR2);
 PROCEDURE update_person_password(pid_person IN NUMBER, ppassword IN VARCHAR2);
+PROCEDURE update_person_person_type(pid_person IN NUMBER, ptype IN NUMBER);
 FUNCTION getPersonFirstName(pid_person IN NUMBER) RETURN VARCHAR2 ;
 FUNCTION getPersonLastName(pid_person IN NUMBER) RETURN VARCHAR2;
 FUNCTION getPersonBirthDay(pid_person IN NUMBER) RETURN DATE;
 FUNCTION getPersonUsername(pid_person IN NUMBER) RETURN VARCHAR2;
 FUNCTION getPersonPassword(pid_person IN NUMBER) RETURN VARCHAR2;
 FUNCTION getPersonAge(pId IN NUMBER) RETURN NUMBER;
+FUNCTION getPersonIdTypePerson(pid_person IN NUMBER) RETURN NUMBER;
 FUNCTION getPersonID(pfirst_name IN VARCHAR2, plast_name IN VARCHAR2, pbirthday IN DATE) RETURN NUMBER;
 END control_person; 
 /
@@ -92,7 +94,7 @@ e_invalid_person EXCEPTION;
 BEGIN
 	UPDATE person
 	SET first_name = pfirst_name
-	WHERE id_person = id_person;
+	WHERE id_person = pid_person;
 	COMMIT;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_person;
@@ -180,7 +182,7 @@ e_invalid_person EXCEPTION;
 BEGIN
 	UPDATE person
 	SET username = puser_name
-	WHERE id_person = id_person;
+	WHERE id_person = pid_person;
 	COMMIT;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_person;
@@ -196,14 +198,14 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE(SQLCODE);
 END update_person_username;
 
-/*
-PROCEDURE update_person_type_person(pid_person IN NUMBER, ptype IN NUMBER)
+
+PROCEDURE update_person_person_type(pid_person IN NUMBER, ptype IN NUMBER)
 as
 e_invalid_person EXCEPTION;
 BEGIN
 	UPDATE person
-	SET id_type_person = ptype
-	WHERE id_person = id_person;
+	SET id_person_type = ptype
+	WHERE id_person = pid_person;
 	COMMIT;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_person;
@@ -217,15 +219,15 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
         DBMS_OUTPUT.PUT_LINE(SQLERRM);
         DBMS_OUTPUT.PUT_LINE(SQLCODE);
-END update_person_type_person;
+END update_person_person_type;
 
-*/
+
 PROCEDURE update_person_password(pid_person IN NUMBER, ppassword IN VARCHAR2) AS
 e_invalid_person EXCEPTION;
 BEGIN
 	UPDATE person
 	SET password = ppassword
-	WHERE id_person = id_person;
+	WHERE id_person = pid_person;
 	COMMIT;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_person;
@@ -398,12 +400,12 @@ BEGIN
             DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
 END;
 
-/*
+
 FUNCTION getPersonIdTypePerson(pid_person IN NUMBER) RETURN NUMBER
 IS 
     vcPersonIdTypePerson NUMBER(6);
     BEGIN
-        SELECT id_type_person
+        SELECT id_person_type
         INTO vcPersonIdTypePerson
         FROM person
         WHERE id_person = pid_person;
@@ -420,7 +422,7 @@ IS
             WHEN OTHERS THEN
             DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
     END;
-    */
+    
 FUNCTION getPersonID(pfirst_name IN VARCHAR2, plast_name IN VARCHAR2, pbirthday IN DATE) RETURN NUMBER
 IS
     vcPersonID VARCHAR(50);

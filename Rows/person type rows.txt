@@ -1,0 +1,3 @@
+EXECUTE control_person_type.insert_person_type('Admin')
+EXECUTE control_person_type.insert_person_type('User')
+EXECUTE control_person_type.insert_person_type('Normal')
