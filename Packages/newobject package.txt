@@ -1,5 +1,5 @@
 Create or replace package control_newobject is
-PROCEDURE insert_newobject (pdescription IN VARCHAR2);
+PROCEDURE insert_newobject (pdescription IN VARCHAR2, pid_object_type IN NUMBER);
 PROCEDURE remove_newobject (pid_object IN NUMBER);
 PROCEDURE update_newobject_description(pid_object IN NUMBER, pdescription IN VARCHAR2);
 FUNCTION getnewobjectdescription(pid_object IN NUMBER) RETURN VARCHAR2;
@@ -8,10 +8,10 @@ end control_newobject;
 /
 CREATE OR REPLACE PACKAGE BODY control_newobject IS
 
-PROCEDURE insert_newobject (pdescription IN VARCHAR2) AS
+PROCEDURE insert_newobject (pdescription IN VARCHAR2, pid_object_type IN NUMBER) AS
 BEGIN
-	INSERT INTO newobject(description)
-	VALUES(pdescription);
+	INSERT INTO newobject(description, id_object_type)
+	VALUES(pdescription, pid_object_type);
 END insert_newobject;
 
 PROCEDURE remove_newobject (pid_object IN NUMBER) AS

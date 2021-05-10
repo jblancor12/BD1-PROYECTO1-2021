@@ -1,0 +1,2 @@
+EXECUTE control_object_type.insert_object_type('Movie');
+EXECUTE control_object_type.insert_object_type('Videogame');

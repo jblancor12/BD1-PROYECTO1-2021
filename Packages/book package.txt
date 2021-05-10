@@ -1,6 +1,6 @@
 CREATE OR REPLACE PACKAGE control_book IS
 
-PROCEDURE insert_book(ptitle IN VARCHAR2, pid_book_edition NUMBER, pid_editorial NUMBER, pid_calification NUMBER, pid_photo NUMBER);
+PROCEDURE insert_book(ptitle IN VARCHAR2, pid_book_edition NUMBER, pid_editorial NUMBER, pid_calification NUMBER);
 PROCEDURE remove_book(pid_book IN NUMBER);
 PROCEDURE update_book_title(pid_book IN NUMBER, ptitle IN VARCHAR2);
 PROCEDURE update_book_id_book_edition(pid_book IN NUMBER, pid IN NUMBER);
@@ -18,10 +18,10 @@ END control_book;
 CREATE OR REPLACE PACKAGE BODY control_book IS
 
 
-PROCEDURE insert_book(ptitle IN VARCHAR2, pid_book_edition NUMBER, pid_editorial NUMBER, pid_calification NUMBER, pid_photo NUMBER)AS
+PROCEDURE insert_book(ptitle IN VARCHAR2, pid_book_edition NUMBER, pid_editorial NUMBER, pid_calification NUMBER)AS
 BEGIN 
-	INSERT INTO book(title, id_book_edition, id_editorial, id_calification, id_photo)
-	VALUES(ptitle, pid_book_edition, pid_editorial, pid_calification, pid_photo);
+	INSERT INTO book(title, id_book_edition, id_editorial, id_calification)
+	VALUES(ptitle, pid_book_edition, pid_editorial, pid_calification);
 	COMMIT;
 END insert_book;
 

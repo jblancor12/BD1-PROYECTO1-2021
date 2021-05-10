@@ -1,0 +1,5 @@
+EXECUTE control_editorial.insert_editorial('4A');
+EXECUTE control_editorial.insert_editorial('Allen and Unwin');
+EXECUTE control_editorial.insert_editorial('Bantam');
+EXECUTE control_editorial.insert_editorial('Bloomsbury');
+EXECUTE control_editorial.insert_editorial('Image');

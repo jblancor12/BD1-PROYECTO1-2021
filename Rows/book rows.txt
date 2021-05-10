@@ -1,0 +1,8 @@
+EXECUTE control_book.insert_book('The Lord of the Rings',0,4,4)
+EXECUTE control_book.insert_book('Invincible',4,3,4)
+EXECUTE control_book.insert_book('The Walking Dead',3,3,4)
+EXECUTE control_book.insert_book('A Game of Thrones',2,2,4)
+EXECUTE control_book.insert_book('A Dance with Dragons',2,1,4)
+EXECUTE control_book.insert_book('The Call of Cthulhu',1,4,4)
+EXECUTE control_book.insert_book('The Shadow over Innsmouth',1,0,4)
+EXECUTE control_book.insert_book('Watchmen',4,3,4)

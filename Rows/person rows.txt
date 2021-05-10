@@ -1,0 +1,2 @@
+EXECUTE control_person.insert_user(116740176,'Luis Diego','Rodriguez',DATE '1997-04-11','ldrc161997@gmail.com','IDIR','ldrc10')
+EXECUTE control_person.insert_user(116740176,'Jose','Blanco',DATE '1998-07-07','jblanco@gmail.com','Guthix','jablan')

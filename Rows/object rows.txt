@@ -1,0 +1,4 @@
+EXECUTE control_newobject.insert_newobject('Bloodborne',1);
+EXECUTE control_newobject.insert_newobject('God of War',1);
+EXECUTE control_newobject.insert_newobject('Blade Runner',0);
+EXECUTE control_newobject.insert_newobject('Mad Max',0)

@@ -1,0 +1,5 @@
+EXECUTE control_calification.insert_calification(1);
+EXECUTE control_calification.insert_calification(2);
+EXECUTE control_calification.insert_calification(3);
+EXECUTE control_calification.insert_calification(4);
+EXECUTE control_calification.insert_calification(5);

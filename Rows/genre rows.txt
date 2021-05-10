@@ -1,0 +1,11 @@
+EXECUTE control_genre.insert_genre('Fantasy');
+EXECUTE control_genre.insert_genre('Comic Book');
+EXECUTE control_genre.insert_genre('Drama');
+EXECUTE control_genre.insert_genre('Graphic Novel');
+EXECUTE control_genre.insert_genre('Horror');
+EXECUTE control_genre.insert_genre('Mystery');
+EXECUTE control_genre.insert_genre('Science Fiction');
+EXECUTE control_genre.insert_genre('Thriller');
+EXECUTE control_genre.insert_genre('Action');
+EXECUTE control_genre.insert_genre('Superhero');
+EXECUTE control_genre.insert_genre('Novel');

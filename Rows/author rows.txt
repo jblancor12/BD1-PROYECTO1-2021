@@ -1,0 +1,18 @@
+EXECUTE control_author.insert_author('George R.R. Martin');
+EXECUTE control_author.insert_author('J.R.R. Tolkien');
+EXECUTE control_author.insert_author('Robert Kirkman');
+EXECUTE control_author.insert_author('H.P. Lovecraft');
+EXECUTE control_author.insert_author('Alan Moore');
+EXECUTE control_author.insert_author('Ryan Ottley');
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,4 @@
+EXECUTE control_relationship.insert_relationship('Student');
+EXECUTE control_relationship.insert_relationship('Family');
+EXECUTE control_relationship.insert_relationship('Friend');
+EXECUTE control_relationship.insert_relationship('Acquaintance');

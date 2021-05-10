@@ -1,0 +1,5 @@
+EXECUTE control_bookedition.insert_bookedition('First Edition');
+EXECUTE control_bookedition.insert_bookedition('Second Edition');
+EXECUTE control_bookedition.insert_bookedition('Third Edition');
+EXECUTE control_bookedition.insert_bookedition('Final Edition');
+EXECUTE control_bookedition.insert_bookedition('Special Edition');
