@@ -1,12 +1,24 @@
 Create or replace package control_relationship is
+Type t_ref_cursor is ref cursor;
 PROCEDURE insert_relationship (pdescription IN VARCHAR2);
 PROCEDURE remove_relationship (pid_relationship IN NUMBER);
 PROCEDURE u_relationship_description(pid_relationship IN NUMBER, pdescription IN VARCHAR2);
 FUNCTION getrelationshipdescription(pid_relationship IN NUMBER) RETURN VARCHAR2;
 FUNCTION get_relationship_id(pdescription varchar2) return number;
+Function show_relationship return t_ref_cursor;
 end control_relationship;
 /
 CREATE OR REPLACE PACKAGE BODY control_relationship IS
+Function show_relationship return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select id_relationship, description
+from relationship;
+return dept_cursor ; 
+end show_relationship;
+
+
+
 
 PROCEDURE insert_relationship (pdescription IN VARCHAR2) AS
 BEGIN

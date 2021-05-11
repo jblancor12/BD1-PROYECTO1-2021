@@ -1,12 +1,23 @@
 Create or replace package control_author is
+Type t_ref_cursor is ref cursor;
 PROCEDURE insert_author (pname IN VARCHAR2);
 PROCEDURE remove_author (pid_author IN NUMBER);
 PROCEDURE update_author_name(pid_author IN NUMBER, pname IN VARCHAR2);
+Function show_authors return t_ref_cursor;
 FUNCTION getauthorname(pid_author IN NUMBER) RETURN VARCHAR2;
 FUNCTION get_author_id(pname varchar2) return number;
 end control_author;
 /
 CREATE OR REPLACE PACKAGE BODY control_author IS
+
+Function show_authors return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select id_author, name
+from author;
+return dept_cursor ; 
+end show_authors;   
+
 
 PROCEDURE insert_author (pname IN VARCHAR2) AS
 BEGIN
@@ -105,4 +116,3 @@ IS
             DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
     END;
 end control_author;
-

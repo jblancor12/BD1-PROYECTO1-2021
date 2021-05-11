@@ -1,12 +1,22 @@
 Create or replace package control_editorial is
+Type t_ref_cursor is ref cursor;
 PROCEDURE insert_editorial (pdescription IN VARCHAR2);
 PROCEDURE remove_editorial (pid_editorial IN NUMBER);
 PROCEDURE update_editorial_description(pid_editorial IN NUMBER, pdescription IN VARCHAR2);
 FUNCTION geteditorialdescription(pid_editorial IN NUMBER) RETURN VARCHAR2;
 FUNCTION get_editorial_id(pdescription varchar2) return number;
+Function show_editorial return t_ref_cursor;
 end control_editorial;
 /
 CREATE OR REPLACE PACKAGE BODY control_editorial IS
+
+Function show_editorial return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select id_editorial, description
+from editorial;
+return dept_cursor ; 
+end show_authors;
 
 PROCEDURE insert_editorial (pdescription IN VARCHAR2) AS
 BEGIN

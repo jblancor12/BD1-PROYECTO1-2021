@@ -1,12 +1,22 @@
 Create or replace package control_calification is
+Type t_ref_cursor is ref cursor;
 PROCEDURE insert_calification (pscore IN NUMBER);
 PROCEDURE remove_calification (pid_calification IN NUMBER);
 PROCEDURE update_calification_score(pid_calification IN NUMBER, pscore IN NUMBER);
-FUNCTION getcalificationscore(pid_calification IN NUMBER) RETURN NUMBER;
+Function show_califications return t_ref_cursor;
+FUNCTION getcalificationscore(pid_calification IN NUMBER) RETURN NUMBER;---da errror
 FUNCTION get_calification_id(pscore NUMBER) return number;
 end control_calification;
 /
 CREATE OR REPLACE PACKAGE BODY control_calification IS
+
+Function show_califications return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select id_calification, score
+from calification;
+return dept_cursor ; 
+end show_califications;
 
 PROCEDURE insert_calification (pscore IN NUMBER) AS
 BEGIN

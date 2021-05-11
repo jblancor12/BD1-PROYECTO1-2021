@@ -2,7 +2,7 @@ CREATE OR REPLACE PACKAGE control_person IS
 
 FUNCTION PasswordEncryption(pencrypt_password IN VARCHAR2) RETURN VARCHAR2;
 PROCEDURE insert_person(pid_person IN NUMBER,pfirst_name IN VARCHAR2, plast_name VARCHAR2, pbirth_day DATE,  pemail VARCHAR2) ;
-PROCEDURE insert_user(pid_person IN NUMBER,pfirst_name IN VARCHAR2, plast_name VARCHAR2, pbirth_day DATE,  
+PROCEDURE insert_user(pid_person IN NUMBER,pfirst_name IN VARCHAR2, plast_name VARCHAR2, pbirth_day VARCHAR2,  
                                             pemail VARCHAR2, pusername VARCHAR2, ppassword VARCHAR2);
 PROCEDURE remove_person(pid_person IN NUMBER);
 PROCEDURE update_person_first_name(pid_person IN NUMBER, pfirst_name IN VARCHAR2);
@@ -11,15 +11,13 @@ PROCEDURE update_person_birthday(pid_person IN NUMBER, pbirth_day IN DATE);
 PROCEDURE update_person_email(pid_person IN NUMBER, pemail IN VARCHAR2);
 PROCEDURE update_person_username(pid_person IN NUMBER, puser_name IN VARCHAR2);
 PROCEDURE update_person_password(pid_person IN NUMBER, ppassword IN VARCHAR2);
-PROCEDURE update_person_person_type(pid_person IN NUMBER, ptype IN NUMBER);
 FUNCTION getPersonFirstName(pid_person IN NUMBER) RETURN VARCHAR2 ;
 FUNCTION getPersonLastName(pid_person IN NUMBER) RETURN VARCHAR2;
 FUNCTION getPersonBirthDay(pid_person IN NUMBER) RETURN DATE;
 FUNCTION getPersonUsername(pid_person IN NUMBER) RETURN VARCHAR2;
-FUNCTION getPersonPassword(pid_person IN NUMBER) RETURN VARCHAR2;
+FUNCTION getPersonPassword(pusername IN VARCHAR2) RETURN VARCHAR2;
 FUNCTION getPersonAge(pId IN NUMBER) RETURN NUMBER;
-FUNCTION getPersonIdTypePerson(pid_person IN NUMBER) RETURN NUMBER;
-FUNCTION getPersonID(pfirst_name IN VARCHAR2, plast_name IN VARCHAR2, pbirthday IN DATE) RETURN NUMBER;
+FUNCTION getPersonID(pusername varchar2) RETURN NUMBER;
 END control_person; 
 /
 CREATE OR REPLACE PACKAGE BODY control_person IS
@@ -60,10 +58,10 @@ BEGIN
 END insert_person;
 
 
-PROCEDURE insert_user(pid_person IN NUMBER,pfirst_name IN VARCHAR2, plast_name VARCHAR2, pbirth_day DATE,  pemail VARCHAR2, pusername VARCHAR2, ppassword VARCHAR2) AS
+PROCEDURE insert_user(pid_person IN NUMBER,pfirst_name IN VARCHAR2, plast_name VARCHAR2, pbirth_day Varchar2,  pemail VARCHAR2, pusername VARCHAR2, ppassword VARCHAR2) AS
 BEGIN 
 	INSERT INTO person(id_person,first_name, last_name, birthday, email, username, password)
-	VALUES(pid_person,pfirst_name, plast_name, pbirth_day, pemail, pusername, PasswordEncryption(ppassword));
+	VALUES(pid_person,pfirst_name, plast_name, TO_DATE(pbirth_day, 'yyyy/mm/dd'), pemail, pusername, PasswordEncryption(ppassword));
     COMMIT;
 END insert_user;
 
@@ -94,7 +92,7 @@ e_invalid_person EXCEPTION;
 BEGIN
 	UPDATE person
 	SET first_name = pfirst_name
-	WHERE id_person = pid_person;
+	WHERE id_person = id_person;
 	COMMIT;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_person;
@@ -182,7 +180,7 @@ e_invalid_person EXCEPTION;
 BEGIN
 	UPDATE person
 	SET username = puser_name
-	WHERE id_person = pid_person;
+	WHERE id_person = id_person;
 	COMMIT;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_person;
@@ -198,14 +196,14 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE(SQLCODE);
 END update_person_username;
 
-
-PROCEDURE update_person_person_type(pid_person IN NUMBER, ptype IN NUMBER)
+/*
+PROCEDURE update_person_type_person(pid_person IN NUMBER, ptype IN NUMBER)
 as
 e_invalid_person EXCEPTION;
 BEGIN
 	UPDATE person
-	SET id_person_type = ptype
-	WHERE id_person = pid_person;
+	SET id_type_person = ptype
+	WHERE id_person = id_person;
 	COMMIT;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_person;
@@ -219,15 +217,15 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
         DBMS_OUTPUT.PUT_LINE(SQLERRM);
         DBMS_OUTPUT.PUT_LINE(SQLCODE);
-END update_person_person_type;
+END update_person_type_person;
 
-
+*/
 PROCEDURE update_person_password(pid_person IN NUMBER, ppassword IN VARCHAR2) AS
 e_invalid_person EXCEPTION;
 BEGIN
 	UPDATE person
 	SET password = ppassword
-	WHERE id_person = pid_person;
+	WHERE id_person = id_person;
 	COMMIT;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_person;
@@ -357,14 +355,14 @@ IS
             DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
     END;
 
-FUNCTION getPersonPassword(pid_person IN NUMBER) RETURN VARCHAR2
+FUNCTION getPersonPassword(pusername IN varchar2) RETURN VARCHAR2
 IS
     vcPersonPassword VARCHAR(50);
     BEGIN
         SELECT password
         INTO vcPersonPassword
         FROM person
-        WHERE id_person = pid_person;
+        WHERE username = pusername;
         RETURN(vcPersonPassword);
         EXCEPTION
             WHEN TOO_MANY_ROWS THEN
@@ -400,12 +398,12 @@ BEGIN
             DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
 END;
 
-
+/*
 FUNCTION getPersonIdTypePerson(pid_person IN NUMBER) RETURN NUMBER
 IS 
     vcPersonIdTypePerson NUMBER(6);
     BEGIN
-        SELECT id_person_type
+        SELECT id_type_person
         INTO vcPersonIdTypePerson
         FROM person
         WHERE id_person = pid_person;
@@ -422,15 +420,15 @@ IS
             WHEN OTHERS THEN
             DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
     END;
-    
-FUNCTION getPersonID(pfirst_name IN VARCHAR2, plast_name IN VARCHAR2, pbirthday IN DATE) RETURN NUMBER
+    */
+FUNCTION getPersonID(pusername varchar2) RETURN NUMBER
 IS
-    vcPersonID VARCHAR(50);
+    vcPersonID number(9);
     BEGIN
         SELECT id_person
         INTO vcPersonID
         FROM person
-        WHERE first_name = pfirst_name AND last_name = plast_name AND birthday = pbirthday;
+        WHERE username=pusername;
         RETURN(vcPersonID);
         EXCEPTION
             WHEN TOO_MANY_ROWS THEN

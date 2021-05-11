@@ -1,5 +1,5 @@
 create or replace package control_personknowsperson is
-PROCEDURE insert_personknowsperson (pid_person1 IN NUMBER, pid_person2 NUMBER,pid_relationship IN NUMBER);
+PROCEDURE insert_personknowsperson (pid_person1 IN NUMBER, pid_person2 NUMBER);
 PROCEDURE remove_personknowsperson (pid_person1 IN NUMBER,pid_person2 in NUMBER);
 PROCEDURE update_pkp_id_person1(pid_person1 IN NUMBER, pnewid NUMBER);
 PROCEDURE update_pkp_id_person2(pid_person2 IN NUMBER, pnewid NUMBER);
@@ -11,10 +11,10 @@ end control_personknowsperson;
 /
 create or replace PACKAGE BODY control_personknowsperson IS
 
-PROCEDURE insert_personknowsperson (pid_person1 IN NUMBER, pid_person2 NUMBER,pid_relationship IN NUMBER)AS
+PROCEDURE insert_personknowsperson (pid_person1 IN NUMBER, pid_person2 NUMBER)AS
 begin
-    insert into personknowsperson(id_person1,id_person2,id_relationship)
-    values (pid_person1,pid_person2,pid_relationship);
+    insert into personknowsperson(id_person1,id_person2)
+    values (pid_person1,pid_person2);
     commit;
 end insert_personknowsperson;
 
