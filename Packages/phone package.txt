@@ -1,3 +1,4 @@
+
 Create or replace package control_phone is
 Type t_ref_cursor is ref cursor;
 PROCEDURE insert_phone (pnumber IN NUMBER);
@@ -5,7 +6,7 @@ PROCEDURE remove_phone (pid_phone IN NUMBER);
 PROCEDURE update_phone_number(pid_phone IN NUMBER, pnumber IN NUMBER);
 FUNCTION getphonenumber(pid_phone IN NUMBER) RETURN NUMBER;
 FUNCTION get_phone_id(pnumber NUMBER) return number;
-Function show_editorial return t_ref_cursor;
+Function show_phone return t_ref_cursor;
 end control_phone;
 /
 CREATE OR REPLACE PACKAGE BODY control_phone IS
@@ -13,7 +14,7 @@ CREATE OR REPLACE PACKAGE BODY control_phone IS
 Function show_phone return t_ref_cursor is dept_cursor t_ref_cursor;
 begin
 open dept_cursor for
-select id_phone, description
+select id_phone, phone_number
 from phone;
 return dept_cursor ; 
 end show_phone;
@@ -117,4 +118,3 @@ IS
             DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
     END;
 end control_phone;
-

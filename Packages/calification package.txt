@@ -4,7 +4,7 @@ PROCEDURE insert_calification (pscore IN NUMBER);
 PROCEDURE remove_calification (pid_calification IN NUMBER);
 PROCEDURE update_calification_score(pid_calification IN NUMBER, pscore IN NUMBER);
 Function show_califications return t_ref_cursor;
-FUNCTION getcalificationscore(pid_calification IN NUMBER) RETURN NUMBER;---da errror
+FUNCTION getcalificationscore(pid_calification IN NUMBER) RETURN NUMBER;
 FUNCTION get_calification_id(pscore NUMBER) return number;
 end control_calification;
 /
@@ -114,31 +114,7 @@ IS
             WHEN OTHERS THEN
             DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
     END;
-end control_calification;
+
 
     
-    
-    
-FUNCTION get_calification_id(pscore varchar2) return number
-
-IS 
-    vcID VARCHAR2(50);
-    BEGIN
-        SELECT id_calification
-        INTO vcID
-        FROM calification
-        WHERE score = pscore;
-        RETURN (vcID);
-        EXCEPTION
-            WHEN TOO_MANY_ROWS THEN
-            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
-            WHEN NO_DATA_FOUND THEN
-            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the score||pcnombre.');
-            WHEN STORAGE_ERROR THEN
-            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
-            WHEN VALUE_ERROR THEN
-            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
-            WHEN OTHERS THEN
-            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
-    END;
 end control_calification;

@@ -16,7 +16,7 @@ open dept_cursor for
 select id_editorial, description
 from editorial;
 return dept_cursor ; 
-end show_authors;
+end show_editorial;
 
 PROCEDURE insert_editorial (pdescription IN VARCHAR2) AS
 BEGIN
@@ -115,5 +115,6 @@ IS
             DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
     END;
 end control_editorial;
+
 
 
