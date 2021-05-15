@@ -1,13 +1,23 @@
 
 Create or replace package control_bookedition is
+Type t_ref_cursor is ref cursor;
 PROCEDURE insert_bookedition (pdescription IN VARCHAR2);
 PROCEDURE remove_bookedition (pid_edition IN NUMBER);
 PROCEDURE update_bookedition_description(pid_edition IN NUMBER, pdescription IN VARCHAR2);
 FUNCTION getbookeditiondescription(pid_edition IN NUMBER) RETURN VARCHAR2;
 FUNCTION get_bookedition_id(pdescription varchar2) return number;
+Function show_edition return t_ref_cursor;
 end control_bookedition;
 /
 CREATE OR REPLACE PACKAGE BODY control_bookedition IS
+
+Function show_edition return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select id_edition, description
+from bookedition;
+return dept_cursor ; 
+end show_edition;
 
 PROCEDURE insert_bookedition (pdescription IN VARCHAR2) AS
 BEGIN

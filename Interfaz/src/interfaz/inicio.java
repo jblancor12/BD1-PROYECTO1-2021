@@ -7,6 +7,7 @@ package interfaz;
 
 import static interfaz.Interfaz.v1;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,7 +16,7 @@ import java.util.logging.Logger;
  * @author andres
  */
 public class inicio extends javax.swing.JFrame {
-
+    public static int id_user;
     /**
      * Creates new form inicio
      */
@@ -123,15 +124,20 @@ public class inicio extends javax.swing.JFrame {
             String r1 = connect.connectdbp.getPassword(usernameTextField.getText());
             String r2 = connect.connectdbp.encryptPassword(passwordTextField.getText());
             if(r1.equals(r2)){
+                id_user = connect.connectdbp.getUserId(usernameTextField.getText());
+                System.out.println(id_user);
                 Menu M = new Menu(this, true);
                 M.setVisible(true);
                 v1.setVisible(false);
+
                 
             }
             System.out.println(r1);
             System.out.println(r2);
             
         } catch (SQLException ex) {
+            Logger.getLogger(inicio.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             Logger.getLogger(inicio.class.getName()).log(Level.SEVERE, null, ex);
         }
 

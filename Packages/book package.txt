@@ -1,5 +1,5 @@
 CREATE OR REPLACE PACKAGE control_book IS
-
+Type t_ref_cursor is ref cursor;
 PROCEDURE insert_book(ptitle IN VARCHAR2, pid_book_edition NUMBER, pid_editorial NUMBER, pid_calification NUMBER);
 PROCEDURE remove_book(pid_book IN NUMBER);
 PROCEDURE update_book_title(pid_book IN NUMBER, ptitle IN VARCHAR2);
@@ -7,6 +7,8 @@ PROCEDURE update_book_id_book_edition(pid_book IN NUMBER, pid IN NUMBER);
 PROCEDURE update_book_id_editorial(pid_book IN NUMBER, pid IN NUMBER);
 PROCEDURE update_book_id_calification(pid_book IN NUMBER, pid IN NUMBER);
 PROCEDURE update_book_id_photo(pid_book IN NUMBER, pid IN NUMBER);
+Function show_books return t_ref_cursor;
+FUNCTION getMaxID return NUMBER;
 FUNCTION getbooktitle(pid_book IN NUMBER) RETURN VARCHAR2 ;
 FUNCTION getbookidbook_edition(pid_book IN NUMBER) RETURN NUMBER;
 FUNCTION getbookideditorial(pid_book IN NUMBER) RETURN NUMBER;
@@ -16,7 +18,34 @@ FUNCTION getbookID(ptitle IN VARCHAR2) RETURN NUMBER;
 END control_book;
 /
 CREATE OR REPLACE PACKAGE BODY control_book IS
+Function show_books return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select a.id_book, a.title, e.description, d.description,b.name, c.score
+from book a
+join editorial e
+on a.id_editorial = e.id_editorial
+join bookedition d
+on a.id_book_edition= d.id_edition
+join bookxauthor j
+on a.id_book = j.id_book
+join author b
+on j.id_author = b.id_author
+join calification c
+on a.id_calification = c.id_calification;
+return dept_cursor ; 
+end show_books; 
 
+
+FUNCTION getMaxID RETURN NUMBER
+IS
+    vcVar NUMBER(30);
+    BEGIN
+	select Max(id_book)
+	into vcVar
+	from book;
+	return (vcVar);
+end getMaxID;
 
 PROCEDURE insert_book(ptitle IN VARCHAR2, pid_book_edition NUMBER, pid_editorial NUMBER, pid_calification NUMBER)AS
 BEGIN 

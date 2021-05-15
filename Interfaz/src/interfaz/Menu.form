@@ -29,10 +29,8 @@
                   <Component id="Lend_BooksButton" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="CatalogsButton" max="32767" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="PersonsButtons" alignment="0" max="32767" attributes="0"/>
-                          <Component id="QueriesButtons" alignment="0" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="PersonsButtons" alignment="0" max="32767" attributes="0"/>
+                      <Component id="QueriesButtons" alignment="0" max="32767" attributes="0"/>
                       <Component id="BooksButton" alignment="0" max="32767" attributes="0"/>
                   </Group>
               </Group>

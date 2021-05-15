@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 import oracle.jdbc.OracleTypes;
@@ -342,6 +343,580 @@ public class connectdbp {
         
 
         return modelo;
+    }
+   /*************************************************************************************************************************************************/ 
+    public static DefaultTableModel showEdition()throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        
+        
+        String data [] = new String[2];
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("Edition");
+
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{ ?= call control_bookedition.show_edition()}");
+
+
+
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r =(ResultSet) stmt.getObject(1);
+        while(r.next()){
+                 
+               data [0] = r.getString("id_edition");
+               data [1] = r.getString("description");
+                 
+                
+                 
+                 modelo.addRow(data);
+             
+                 
+                
+                 
+                 
+             }
+        
+
+        return modelo;
+    }
+    
+    
+        public static ArrayList EditionList()throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        
+        
+        ArrayList editionList = new ArrayList();
+        
+        
+
+
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{ ?= call control_bookedition.show_edition()}");
+
+
+
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r =(ResultSet) stmt.getObject(1);
+        while(r.next()){
+                 
+              
+               editionList.add(r.getString("description"));
+                
+             }
+        
+
+        return editionList;
+    }
+        
+        
+        
+        
+    public static ArrayList AuthorList()throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        
+        
+        ArrayList editionList = new ArrayList();
+        
+        
+
+
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{ ?= call control_Author.show_authors()}");
+
+
+
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r =(ResultSet) stmt.getObject(1);
+        while(r.next()){
+                 
+              
+               editionList.add(r.getString("name"));
+                
+             }
+        
+
+        return editionList;
+    }
+    
+    
+    public static ArrayList ScoreList()throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        
+        
+        ArrayList editionList = new ArrayList();
+        
+        
+
+
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{ ?= call control_calification.show_califications()}");
+
+
+
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r =(ResultSet) stmt.getObject(1);
+        while(r.next()){
+                 
+              
+               editionList.add(r.getString("score"));
+                
+             }
+        
+
+        return editionList;
+    }
+    
+    
+    public static ArrayList editorialList()throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        
+        
+        ArrayList editionList = new ArrayList();
+        
+        
+
+
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{ ?= call control_editorial.show_editorial()}");
+
+
+
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r =(ResultSet) stmt.getObject(1);
+        while(r.next()){
+                 
+              
+               editionList.add(r.getString("description"));
+                
+             }
+        
+
+        return editionList;
+    }
+    
+    
+    
+    
+    public static int getEditorialId(String pdescription)throws SQLException, ParseException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{?= call control_editorial.get_editorial_id(?)}");
+        
+        int r;
+        stmt.registerOutParameter(1,OracleTypes.INTEGER);
+        stmt.setString(2 , pdescription);
+        stmt.executeQuery();
+        r = (int) stmt.getInt(1);
+        return r;
+    }
+    
+    
+    public static int getEditionId(String pdescription)throws SQLException, ParseException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{?= call control_bookedition.get_bookedition_id(?)}");
+        
+        int r;
+        stmt.registerOutParameter(1,OracleTypes.INTEGER);
+        stmt.setString(2 , pdescription);
+        stmt.executeQuery();
+        r = (int) stmt.getInt(1);
+        return r;
+    }
+    
+    public static int getScoreId(String pdescription)throws SQLException, ParseException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{?= call control_calification.get_calification_id(?)}");
+        int score = Integer.parseInt(pdescription);  
+        int r;
+        stmt.registerOutParameter(1,OracleTypes.INTEGER);
+        stmt.setInt(2 , score);
+        stmt.executeQuery();
+        r = (int) stmt.getInt(1);
+        return r;
+    }
+    
+    
+    
+    
+    public static int bookMaxId()throws SQLException, ParseException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{?= call control_book.getMaxId}");
+        
+        int r;
+        stmt.registerOutParameter(1,OracleTypes.INTEGER);
+        stmt.executeQuery();
+        r = (int) stmt.getInt(1);
+        return r;
+    }
+    
+    
+    
+    
+    
+    
+   public static void InsertBook(String ptitle, int pidEditorial, int id_edition, int pscore)throws SQLException, ParseException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_book.insert_book(?,?,?,?)}");
+        stmt.setString(1, ptitle);
+         stmt.setInt(2,pidEditorial);
+        stmt.setInt(3,id_edition);
+        stmt.setInt(4,pscore);
+  
+         stmt.execute();
+    }
+    
+   
+       public static int getUserId(String pusername)throws SQLException, ParseException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{?= call control_person.getpersonid(?)}");  
+        int r;
+        stmt.registerOutParameter(1,OracleTypes.INTEGER);
+        stmt.setString(2 , pusername);
+        stmt.executeQuery();
+        r = (int) stmt.getInt(1);
+        return r;
+    }
+       
+       public static void InsertPersonOwnBook(int pidPerson, int pidBook)throws SQLException, ParseException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_personownsbook.insert_personownsbook(?,?)}");
+      
+        stmt.setInt(2,pidBook);
+        stmt.setInt(1,pidPerson);
+     
+  
+         stmt.execute();
+    }
+       
+       public static DefaultTableModel showBooks()throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        
+        
+        String data [] = new String[6];
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("Title");
+        modelo.addColumn("Editorial");
+        modelo.addColumn("Edition");
+        modelo.addColumn("Author");
+        modelo.addColumn("Score");
+
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{ ?= call control_book.show_books()}");
+
+
+
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r =(ResultSet) stmt.getObject(1);
+        while(r.next()){
+                 
+               data [0] = r.getString(1);
+               data [1] = r.getString(2);
+               data [2] = r.getString(3);
+               data [3] = r.getString(4);
+               data [4] = r.getString(5);
+               data [5] = r.getString(6);
+                modelo.addRow(data);
+             
+                 
+                
+                 
+                 
+             }
+        
+
+        return modelo;
+   }
+     
+       public static int getAutorId(String pname)throws SQLException, ParseException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{?= call control_author.get_author_id(?)}");  
+        int r;
+        stmt.registerOutParameter(1,OracleTypes.INTEGER);
+        stmt.setString(2 , pname);
+        stmt.executeQuery();
+        r = (int) stmt.getInt(1);
+        return r;
+    }
+       
+     public static void InsertBookxAuthor(int pidBook, int pidAuthor)throws SQLException, ParseException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_bookxauthor.insert_bookxauthor(?,?)}");
+        stmt.setInt(1,pidAuthor);
+        stmt.setInt(2,pidBook);
+  
+         stmt.execute();
+    }
+     public static void InsertCalification(int pscore)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_calification.insert_calification(?)}");
+         stmt.setInt(1,pscore);
+    
+         stmt.execute();
+    }
+    
+    public static void UpdateCalification(int pid,int pscore)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_calification.update_calification_score(?,?)}");
+         stmt.setInt(1,pid);
+         stmt.setInt(2,pscore);
+         
+        
+    
+         stmt.execute();
+    }
+        
+        public static void RemoveCalification(int pid)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_calification.remove_calification(?)}");
+         stmt.setInt(1,pid);
+         
+        
+    
+         stmt.execute();
+    }
+    public static void InsertEditorial(String pEditorial)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_editorial.insert_editorial(?)}");
+         stmt.setString(1,pEditorial);
+    
+         stmt.execute();
+    }
+    
+    public static void UpdateEditorial(int pid,String pEditorial)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_editorial.update_editorial_description(?,?)}");
+         stmt.setInt(1,pid);
+         stmt.setString(2,pEditorial);
+         
+        
+    
+         stmt.execute();
+    }
+        
+        public static void RemoveEditorial(int pid)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_editorial.remove_editorial(?)}");
+         stmt.setInt(1,pid);
+         
+        
+    
+         stmt.execute();
+    }
+        
+        public static void InsertGenre(String pgenre)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_genre.insert_genre(?)}");
+         stmt.setString(1,pgenre);
+    
+         stmt.execute();
+    }
+    
+    public static void UpdateGenre(int pid,String pgenre)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_genre.update_genre_description(?,?)}");
+         stmt.setInt(1,pid);
+         stmt.setString(2,pgenre);
+         
+        
+    
+         stmt.execute();
+    }
+        
+        public static void RemoveGenre(int pid)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_genre.remove_genre(?)}");
+         stmt.setInt(1,pid);
+         
+        
+    
+         stmt.execute();
+    }
+        
+        public static void InsertRelationship(String prelationship)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_relationship.insert_relationship(?)}");
+         stmt.setString(1,prelationship);
+    
+         stmt.execute();
+    }
+    
+    public static void UpdateRelationship(int pid,String prelationship)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_relationship.u_relationship_description(?,?)}");
+         stmt.setInt(1,pid);
+         stmt.setString(2,prelationship);
+         
+        
+    
+         stmt.execute();
+    }
+        
+        public static void RemoveRelationship(int pid)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_relationship.remove_relationship(?)}");
+         stmt.setInt(1,pid);
+         
+        
+    
+         stmt.execute();
+    }
+        
+        public static void InsertPhoto(String pphoto)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_photo.insert_photo(?)}");
+         stmt.setString(1,pphoto);
+    
+         stmt.execute();
+    }
+    
+    public static void UpdatePhoto(int pid,String pphoto)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_photo.update_photo_description(?,?)}");
+         stmt.setInt(1,pid);
+         stmt.setString(2,pphoto);
+         
+        
+    
+         stmt.execute();
+    }
+        
+        public static void RemovePhoto(int pid)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_photo.remove_photo(?)}");
+         stmt.setInt(1,pid);
+         
+        
+    
+         stmt.execute();
+    }
+        
+        
+        public static void InsertPhone(int pphone)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_phone.insert_phone(?)}");
+         stmt.setInt(1,pphone);
+    
+         stmt.execute();
+    }
+    
+    public static void UpdatePhone(int pid,int pphone)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_phone.update_phone_description(?,?)}");
+         stmt.setInt(1,pid);
+         stmt.setInt(2,pphone);
+         
+        
+    
+         stmt.execute();
+    }
+        
+        public static void RemovePhone(int pid)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_phone.remove_phone(?)}");
+         stmt.setInt(1,pid);
+         
+        
+    
+         stmt.execute();
     }
  }
    

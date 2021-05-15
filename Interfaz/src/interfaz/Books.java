@@ -5,6 +5,14 @@
  */
 package interfaz;
 
+import static interfaz.inicio.id_user;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author andres
@@ -17,6 +25,7 @@ public class Books extends javax.swing.JDialog {
     public Books(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
     }
 
     /**
@@ -28,7 +37,6 @@ public class Books extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         BooksActionCB = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -46,10 +54,9 @@ public class Books extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         BooksExecuteButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        jLabel1.setText("Books");
 
         BooksActionCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Insert", "Update", "Delete" }));
 
@@ -65,15 +72,18 @@ public class Books extends javax.swing.JDialog {
 
         jLabel7.setText("Score");
 
-        BooksAuthorCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        BooksEditorialCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        BooksEditionCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        BooksScoreCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        BooksEditionCB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BooksEditionCBActionPerformed(evt);
+            }
+        });
 
         BooksSeeButton.setText("See");
+        BooksSeeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BooksSeeButtonActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -86,6 +96,18 @@ public class Books extends javax.swing.JDialog {
         jScrollPane1.setViewportView(jTable1);
 
         BooksExecuteButton.setText("Execute");
+        BooksExecuteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BooksExecuteButtonActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Books");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -110,7 +132,7 @@ public class Books extends javax.swing.JDialog {
                                     .addComponent(BooksEditorialCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(BooksEditionCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(BooksScoreCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 219, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 244, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(BooksTitleTF)
                                 .addGap(109, 109, 109)))
@@ -120,9 +142,9 @@ public class Books extends javax.swing.JDialog {
                         .addComponent(BooksIdTF, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(61, 61, 61)
-                .addComponent(jLabel1)
-                .addGap(71, 71, 71)
+                .addGap(35, 35, 35)
+                .addComponent(jButton1)
+                .addGap(54, 54, 54)
                 .addComponent(BooksActionCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(BooksSeeButton)
@@ -138,10 +160,10 @@ public class Books extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(BooksActionCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addGap(18, 18, 18))
+                            .addComponent(jButton1))
+                        .addGap(17, 17, 17))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(BooksSeeButton)
@@ -181,6 +203,81 @@ public class Books extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BooksEditionCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BooksEditionCBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BooksEditionCBActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+                ArrayList<String> edition;
+                ArrayList<String> editorial;
+                ArrayList<String> score;
+                ArrayList<String> author;
+        try {
+            edition = connect.connectdbp.EditionList();
+            editorial = connect.connectdbp.editorialList();
+            score = connect.connectdbp.ScoreList();
+            author = connect.connectdbp.AuthorList();
+            BooksEditionCB.removeAllItems();
+           for (String i: edition){
+            BooksEditionCB.addItem(i);
+           }
+           for(String i: editorial){
+               BooksEditorialCB.addItem(i);
+           }
+           
+           for (String i: score){
+               BooksScoreCB.addItem(i);
+           }
+           for(String i: author){
+               BooksAuthorCB.addItem(i);
+           }
+        } catch (SQLException ex) {
+            Logger.getLogger(Books.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void BooksExecuteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BooksExecuteButtonActionPerformed
+        try {
+            // TODO add your handling code here:
+            System.out.println(BooksEditorialCB.getSelectedItem().toString());
+            System.out.println(connect.connectdbp.getEditorialId(BooksEditorialCB.getSelectedItem().toString()));
+            if(BooksActionCB.getSelectedItem().equals("Insert")){
+                
+            
+            int idEditorial = connect.connectdbp.getEditorialId(BooksEditorialCB.getSelectedItem().toString());
+            int idEdition = connect.connectdbp.getEditionId(BooksEditionCB.getSelectedItem().toString());
+            int idScore = connect.connectdbp.getScoreId(BooksScoreCB.getSelectedItem().toString());
+            int newBookId = connect.connectdbp.bookMaxId();
+            int idAutor = connect.connectdbp.getAutorId(BooksAuthorCB.getSelectedItem().toString());
+            String title = BooksTitleTF.getText();
+            System.out.println(newBookId);
+            
+            connect.connectdbp.InsertBook(title, idEditorial, idEdition, idScore);
+            connect.connectdbp.InsertBookxAuthor(newBookId, idAutor);
+            connect.connectdbp.InsertPersonOwnBook(newBookId, id_user);
+            
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Books.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Books.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_BooksExecuteButtonActionPerformed
+
+    private void BooksSeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BooksSeeButtonActionPerformed
+        try {
+            // TODO add your handling code here:
+            DefaultTableModel modelo = connect.connectdbp.showBooks();
+            jTable1.setModel(modelo);
+        } catch (SQLException ex) {
+            Logger.getLogger(Books.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_BooksSeeButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -222,8 +319,11 @@ public class Books extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+        
+        
     }
 
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> BooksActionCB;
     private javax.swing.JComboBox<String> BooksAuthorCB;
@@ -234,7 +334,7 @@ public class Books extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> BooksScoreCB;
     private javax.swing.JButton BooksSeeButton;
     private javax.swing.JTextField BooksTitleTF;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
