@@ -223,7 +223,128 @@ public class catalogos extends javax.swing.JDialog {
                     Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+        } else if(CatalogsCB.getSelectedItem().equals("Calification")){
+            if(CatalogsActionCB.getSelectedItem().equals("Insert")){
+                try {
+                    connect.connectdbp.InsertCalification(Integer.parseInt(CatalogDescriptionTF.getText()));
+                    System.out.println(CatalogDescriptionTF.getText()); 
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else if (CatalogsActionCB.getSelectedItem().equals("Update")){
+                try {
+                    connect.connectdbp.UpdateCalification(Integer.parseInt(CatalogIdTextField.getText()), Integer.parseInt(CatalogDescriptionTF.getText()));
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else if(CatalogsActionCB.getSelectedItem().equals("Delete")){
+                try {
+                    connect.connectdbp.RemoveCalification(Integer.parseInt(CatalogIdTextField.getText()));
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else if(CatalogsCB.getSelectedItem().equals("Editorial")){
+            if(CatalogsActionCB.getSelectedItem().equals("Insert")){
+                try {
+                    connect.connectdbp.InsertEditorial(CatalogDescriptionTF.getText());
+                    System.out.println(CatalogDescriptionTF.getText()); 
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else if (CatalogsActionCB.getSelectedItem().equals("Update")){
+                try {
+                    connect.connectdbp.UpdateEditorial(Integer.parseInt(CatalogIdTextField.getText()), CatalogDescriptionTF.getText());
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else if(CatalogsActionCB.getSelectedItem().equals("Delete")){
+                try {
+                    connect.connectdbp.RemoveEditorial(Integer.parseInt(CatalogIdTextField.getText()));
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else if(CatalogsCB.getSelectedItem().equals("Genre")){
+            if(CatalogsActionCB.getSelectedItem().equals("Insert")){
+                try {
+                    connect.connectdbp.InsertGenre(CatalogDescriptionTF.getText());
+                    System.out.println(CatalogDescriptionTF.getText()); 
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else if (CatalogsActionCB.getSelectedItem().equals("Update")){
+                try {
+                    connect.connectdbp.UpdateGenre(Integer.parseInt(CatalogIdTextField.getText()), CatalogDescriptionTF.getText());
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else if(CatalogsActionCB.getSelectedItem().equals("Delete")){
+                try {
+                    connect.connectdbp.RemoveGenre(Integer.parseInt(CatalogIdTextField.getText()));
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else if(CatalogsCB.getSelectedItem().equals("Phone")){
+            if(CatalogsActionCB.getSelectedItem().equals("Insert")){
+                try {
+                    connect.connectdbp.InsertPhone(Integer.parseInt(CatalogDescriptionTF.getText()));
+                    System.out.println(CatalogDescriptionTF.getText()); 
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else if (CatalogsActionCB.getSelectedItem().equals("Update")){
+                try {
+                    connect.connectdbp.UpdatePhone(Integer.parseInt(CatalogIdTextField.getText()), Integer.parseInt(CatalogDescriptionTF.getText()));
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else if(CatalogsActionCB.getSelectedItem().equals("Delete")){
+                try {
+                    connect.connectdbp.RemovePhone(Integer.parseInt(CatalogIdTextField.getText()));
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else if(CatalogsCB.getSelectedItem().equals("Relationship")){
+            if(CatalogsActionCB.getSelectedItem().equals("Insert")){
+                try {
+                    connect.connectdbp.InsertRelationship(CatalogDescriptionTF.getText());
+                    System.out.println(CatalogDescriptionTF.getText()); 
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else if (CatalogsActionCB.getSelectedItem().equals("Update")){
+                try {
+                    connect.connectdbp.UpdateRelationship(Integer.parseInt(CatalogIdTextField.getText()), CatalogDescriptionTF.getText());
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else if(CatalogsActionCB.getSelectedItem().equals("Delete")){
+                try {
+                    connect.connectdbp.RemoveRelationship(Integer.parseInt(CatalogIdTextField.getText()));
+                } catch (SQLException ex) {
+                    Logger.getLogger(catalogos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
+          
         
         
     }//GEN-LAST:event_CatalogoExeButtonActionPerformed
