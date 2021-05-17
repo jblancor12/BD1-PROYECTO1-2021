@@ -166,7 +166,8 @@ public class catalogos extends javax.swing.JDialog {
              modelo =connect.connectdbp.showAuthors();
               jTable1.setModel(modelo);
              }
-             else if (CatalogsCB.getSelectedItem()=="Calification"){
+             else if (CatalogsCB.getSelectedItem().equals("Calification")){
+                 System.out.println("Calification");
                  modelo = connect.connectdbp.showCalification();
                  jTable1.setModel(modelo);
              }
@@ -183,7 +184,8 @@ public class catalogos extends javax.swing.JDialog {
                  modelo = connect.connectdbp.showphone();
                  jTable1.setModel(modelo);
              }
-             else if(CatalogsCB.getSelectedItem()=="Relationship"){
+             else if(CatalogsCB.getSelectedItem().equals("Relationship")){
+                 System.out.println("Relationship");
                  modelo = connect.connectdbp.showrelationship();
                  jTable1.setModel(modelo);
              }

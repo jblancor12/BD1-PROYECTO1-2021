@@ -1,7 +1,7 @@
 create or replace package control_bookxauthor is
 PROCEDURE insert_bookxauthor (pid_author IN NUMBER, pid_book NUMBER);
-PROCEDURE remove_bookxauthor (pid_author IN NUMBER,pid_book in NUMBER);
-PROCEDURE update_bxa_id_author(pid_author IN NUMBER, pnewid NUMBER);
+PROCEDURE remove_bookxauthor (pid_book in NUMBER);
+PROCEDURE update_bxa_id_author(pid_book IN NUMBER, pnewid NUMBER);
 PROCEDURE update_bxa_id_book(pid_book IN NUMBER, pnewid NUMBER);
 FUNCTION getbookxauthorIdauthor(pid_book IN NUMBER) RETURN NUMBER;
 FUNCTION getbookxauthorIdbook(pid_author IN NUMBER) RETURN NUMBER;
@@ -19,11 +19,11 @@ begin
 end insert_bookxauthor;
 
 
-PROCEDURE remove_bookxauthor (pid_author IN NUMBER, pid_book IN NUMBER)AS
+PROCEDURE remove_bookxauthor (pid_book IN NUMBER)AS
 e_invalid_exc EXCEPTION;
 begin
     delete from bookxauthor
-    where id_author= pid_author AND id_book = pid_book;
+    where  id_book = pid_book;
     commit;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_exc;
@@ -39,12 +39,12 @@ begin
         DBMS_OUTPUT.PUT_LINE(SQLCODE);
 end remove_bookxauthor;
 
-PROCEDURE update_bxa_id_author(pid_author IN NUMBER, pnewid NUMBER)AS
+PROCEDURE update_bxa_id_author(pid_book IN NUMBER, pnewid NUMBER)AS
 e_invalid_exc EXCEPTION;
 begin
     update bookxauthor
     set id_author=pnewid
-    where id_author=pid_author;
+    where id_book=pid_book;
     commit;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_exc;

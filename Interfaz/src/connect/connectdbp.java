@@ -159,7 +159,7 @@ public class connectdbp {
         modelo.addColumn("Score");
 
         Connection con = DriverManager.getConnection(host, uName, uPass);
-        CallableStatement stmt = con.prepareCall("{ ?= call control_calification.show_calification()}");
+        CallableStatement stmt = con.prepareCall("{ ?= call control_calification.show_califications()}");
 
 
 
@@ -182,7 +182,7 @@ public class connectdbp {
              }
         
 
-        return modelo;
+       return modelo;
     }
         
     
@@ -319,7 +319,7 @@ public class connectdbp {
         modelo.addColumn("relationship");
 
         Connection con = DriverManager.getConnection(host, uName, uPass);
-        CallableStatement stmt = con.prepareCall("{ ?= call control_phone.show_phone()}");
+        CallableStatement stmt = con.prepareCall("{ ?= call control_relationship.show_relationship()}");
 
 
 
@@ -897,7 +897,7 @@ public class connectdbp {
         String uName = "PE";
         String uPass = "PE";
         Connection con = DriverManager.getConnection(host, uName, uPass);
-        CallableStatement stmt = con.prepareCall("{= call control_phone.update_phone_description(?,?)}");
+        CallableStatement stmt = con.prepareCall("{= call control_phone.update_phone_number(?,?)}");
          stmt.setInt(1,pid);
          stmt.setInt(2,pphone);
          
@@ -913,6 +913,106 @@ public class connectdbp {
         Connection con = DriverManager.getConnection(host, uName, uPass);
         CallableStatement stmt = con.prepareCall("{= call control_phone.remove_phone(?)}");
          stmt.setInt(1,pid);
+         
+        
+    
+         stmt.execute();
+    }
+        
+        
+        
+         public static void UpdateBookTitle(int pid,String ptitle)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_book.update_book_title(?,?)}");
+         stmt.setInt(1,pid);
+         stmt.setString(2,ptitle);
+         
+        
+    
+         stmt.execute();
+    }
+         
+         public static void UpdateBookEditorial(int pid,int ptitle)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_book.update_book_id_editorial(?,?)}");
+         stmt.setInt(1,pid);
+         stmt.setInt(2,ptitle);
+         
+        
+    
+         stmt.execute();
+    }
+         
+         public static void UpdateBookEdiion(int pid,int ptitle)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_book.update_book_id_book_edition(?,?)}");
+         stmt.setInt(1,pid);
+         stmt.setInt(2,ptitle);
+         
+        
+    
+         stmt.execute();
+    }
+         
+         public static void UpdateBookScore(int pid,int ptitle)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_book.update_book_id_calification(?,?)}");
+         stmt.setInt(1,pid);
+         stmt.setInt(2,ptitle);
+         
+        
+    
+         stmt.execute();
+    }
+         
+          public static void UpdateBookAuthor(int pid,int ptitle)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_bookxauthor.update_bxa_id_author(?,?)}");
+         stmt.setInt(1,pid);
+         stmt.setInt(2,ptitle);
+         
+        
+    
+         stmt.execute();
+    }
+          
+    public static void RemoveBookAuthor(int pid)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_bookxauthor.remove_bookxauthor(?)}");
+         stmt.setInt(1,pid);
+        
+         
+        
+    
+         stmt.execute();
+    }
+    public static void RemoveBookUser(int pidBook, int pidUser)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_personownsbook.remove_personownsbook(?,?);}");
+         stmt.setInt(1,pidBook);
+          stmt.setInt(2,pidUser);
+        
          
         
     

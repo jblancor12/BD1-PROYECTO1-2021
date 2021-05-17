@@ -261,6 +261,30 @@ public class Books extends javax.swing.JDialog {
             connect.connectdbp.InsertPersonOwnBook(newBookId, id_user);
             
             }
+            else if(BooksActionCB.getSelectedItem().equals("Update")){
+            int idBook = Integer.parseInt(BooksIdTF.getText());
+            int idEditorial = connect.connectdbp.getEditorialId(BooksEditorialCB.getSelectedItem().toString());
+            int idEdition = connect.connectdbp.getEditionId(BooksEditionCB.getSelectedItem().toString());
+            int idAutor = connect.connectdbp.getAutorId(BooksAuthorCB.getSelectedItem().toString());
+            int idScore = connect.connectdbp.getScoreId(BooksScoreCB.getSelectedItem().toString());
+            String title = BooksTitleTF.getText();
+            
+            connect.connectdbp.UpdateBookEdiion(idBook,idEdition);
+            connect.connectdbp.UpdateBookEditorial(idBook, idEditorial);
+            connect.connectdbp.UpdateBookScore(idBook, idScore);
+            connect.connectdbp.UpdateBookTitle(idBook, title);
+            connect.connectdbp.UpdateBookAuthor(idBook, idAutor);
+            
+            
+            
+            
+            }
+            else if(BooksActionCB.getSelectedItem().equals("Delete")){
+                int idBook = Integer.parseInt(BooksIdTF.getText());
+                connect.connectdbp.RemoveBookAuthor(idBook);
+                connect.connectdbp.RemoveBookUser(idBook, id_user);
+            }
+            
         } catch (SQLException ex) {
             Logger.getLogger(Books.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
