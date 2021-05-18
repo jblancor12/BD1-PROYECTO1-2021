@@ -1,10 +1,14 @@
 create or replace package control_personborrowsbook is
-PROCEDURE insert_personborrowsbook (pid_person IN NUMBER, pid_book NUMBER);
-PROCEDURE remove_personborrowsbook (pid_person IN NUMBER,pid_book in NUMBER);
+Type t_ref_cursor is ref cursor;
+PROCEDURE insert_personborrowsbook (pid_person IN NUMBER, pid_book NUMBER,ploan_date  varchar);
+PROCEDURE remove_personborrowsbook (pid_loan NUMBER);
 PROCEDURE update_pbb_id_person(pid_person IN NUMBER, pnewid NUMBER);
-PROCEDURE update_pbb_id_book(pid_book IN NUMBER, pnewid NUMBER);
-PROCEDURE update_pbb_loan_date(ploan_date DATE, pdate DATE);
-PROCEDURE update_pbb_return_date(preturn_date DATE, pdate DATE);
+PROCEDURE update_pbb_id_book(pid_loan IN NUMBER, pnewid NUMBER);
+PROCEDURE update_pbb_loan_date(pid_loan number, pdate DATE);
+PROCEDURE update_pbb_return_date(pid_loan number, pdate DATE);
+Function showUserAvailableBook(pid_user number) return t_ref_cursor;
+Function showUserReturnedBook(pid_user number) return t_ref_cursor;
+Function showUserNotReturnedBook(pid_user number) return t_ref_cursor;
 FUNCTION getpbbIdperson(pid_book IN NUMBER) RETURN NUMBER;
 FUNCTION getpbbIdbook(pid_person IN NUMBER) RETURN NUMBER;
 FUNCTION getpbbloan_date(pid_person IN NUMBER, pid_book IN NUMBER) RETURN DATE;
@@ -13,19 +17,73 @@ end control_personborrowsbook;
 /
 create or replace PACKAGE BODY control_personborrowsbook IS
 
-PROCEDURE insert_personborrowsbook (pid_person IN NUMBER, pid_book NUMBER)AS
+Function showUserAvailableBook(pid_user number) return t_ref_cursor is dept_cursor t_ref_cursor;
 begin
-    insert into personborrowsbook(id_person,id_book)
-    values (pid_person,pid_book);
+open dept_cursor for
+select a.id_book, a.title 
+from book a 
+join personownsbook b
+on a.id_book = b.id_book
+left  join personborrowsbook c
+on b.id_book = c.id_book
+where b.id_person = pid_user 
+minus
+select Distinct (a.id_book), a.title
+from book a 
+join personownsbook b
+on a.id_book = b.id_book
+right  join personborrowsbook c
+on b.id_book = c.id_book
+where b.id_person = 4 and c.return_date is null;
+Return dept_cursor;
+end showUserAvailableBook; 
+
+
+Function showUserReturnedBook(pid_user number) return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select b.id_loan,a.title , c.first_name, c.last_name, b.loan_date, b.return_date
+from book a 
+join personborrowsbook b
+on a.id_book = b.id_book
+join person c 
+on b.id_person = c.id_person
+join personownsbook d
+on a.id_book = d.id_book
+where d.id_person= pid_user and b.return_date is not null;
+Return dept_cursor;
+end showUserReturnedBook;
+
+
+Function showUserNotReturnedBook(pid_user number) return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select b.id_loan, a.title , c.first_name, c.last_name, b.loan_date, b.return_date
+from book a 
+join personborrowsbook b
+on a.id_book = b.id_book
+join person c 
+on b.id_person = c.id_person
+join personownsbook d
+on a.id_book = d.id_book
+where d.id_person= pid_user and b.return_date  is  null;
+Return dept_cursor;
+end showUserNotReturnedBook;
+
+
+PROCEDURE insert_personborrowsbook (pid_person IN NUMBER, pid_book NUMBER, ploan_date  varchar)AS
+begin
+    insert into personborrowsbook(id_person,id_book, loan_date)
+    values (pid_person,pid_book,TO_DATE(ploan_date, 'yyyy/mm/dd'));
     commit;
 end insert_personborrowsbook;
 
 
-PROCEDURE remove_personborrowsbook (pid_person IN NUMBER, pid_book IN NUMBER)AS
+PROCEDURE remove_personborrowsbook (pid_loan number)AS
 e_invalid_exc EXCEPTION;
 begin
     delete from personborrowsbook
-    where id_person= pid_person AND id_book = pid_book;
+    where id_loan = pid_loan;
     commit;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_exc;
@@ -62,12 +120,12 @@ begin
         DBMS_OUTPUT.PUT_LINE(SQLCODE);
 end update_pbb_id_person;
 
-PROCEDURE update_pbb_id_book(pid_book IN NUMBER, pnewid NUMBER)AS
+PROCEDURE update_pbb_id_book(pid_loan IN NUMBER, pnewid NUMBER)AS
 e_invalid_exc EXCEPTION;
 begin
     update personborrowsbook
     set id_book=pnewid
-    where id_book=pid_book;
+    where id_loan=pid_loan;
     commit;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_exc;
@@ -83,12 +141,12 @@ begin
         DBMS_OUTPUT.PUT_LINE(SQLCODE);
 end update_pbb_id_book;
 
-PROCEDURE update_pbb_loan_date(ploan_date DATE, pdate DATE)AS
+PROCEDURE update_pbb_loan_date(pid_loan number, pdate DATE)AS
 e_invalid_exc EXCEPTION;
 begin
     update personborrowsbook
     set loan_date=pdate
-    where loan_date=ploan_date;
+    where id_loan=pid_loan;
     commit;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_exc;
@@ -103,12 +161,14 @@ begin
         DBMS_OUTPUT.PUT_LINE(SQLERRM);
         DBMS_OUTPUT.PUT_LINE(SQLCODE);
 end update_pbb_loan_date;
-PROCEDURE update_pbb_return_date(preturn_date DATE, pdate DATE)AS
+
+
+PROCEDURE update_pbb_return_date(pid_loan number, pdate DATE)AS
 e_invalid_exc EXCEPTION;
 begin
     update personborrowsbook
     set return_date=pdate
-    where return_date=preturn_date;
+    where id_loan=pid_loan;
     commit;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_exc;

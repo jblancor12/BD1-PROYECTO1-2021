@@ -220,7 +220,11 @@ public class Books extends javax.swing.JDialog {
             score = connect.connectdbp.ScoreList();
             author = connect.connectdbp.AuthorList();
             BooksEditionCB.removeAllItems();
+            BooksScoreCB.removeAllItems();
+            BooksEditorialCB.removeAllItems();
+            BooksAuthorCB.removeAllItems();
            for (String i: edition){
+               
             BooksEditionCB.addItem(i);
            }
            for(String i: editorial){

@@ -1018,6 +1018,170 @@ public class connectdbp {
     
          stmt.execute();
     }
+    
+    
+    public static ArrayList UserAvBooksList(int pid_user)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        
+        
+        ArrayList editionList = new ArrayList();
+        
+        
+
+
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{ ?= call control_personborrowsbook.showUserAvailableBook(?)}");
+
+
+
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, pid_user);
+        stmt.executeQuery();
+        ResultSet r =(ResultSet) stmt.getObject(1);
+        while(r.next()){
+                 
+              
+               editionList.add(r.getString(1)+'-'+r.getString(2));
+                
+             }
+        
+
+        return editionList;
+    }
+    
+    public static ArrayList UserKnonwList(int pid_user)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        
+        
+        ArrayList editionList = new ArrayList();
+        
+        
+
+
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{ ?= call control_personknowsperson.showPersonRelations(?)}");
+
+
+
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, pid_user);
+        stmt.executeQuery();
+        ResultSet r =(ResultSet) stmt.getObject(1);
+        while(r.next()){
+                 
+              
+               editionList.add(r.getString(1)+'-'+r.getString(2)+' '+r.getString(3));
+                
+             }
+        
+
+        return editionList;
+    }
+    public static DefaultTableModel showUserReturnedBooks(int pid_user)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        
+        
+        String data [] = new String[6];
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID Loan");
+        modelo.addColumn("Title");
+        modelo.addColumn("First name");
+        modelo.addColumn("Last name");
+        modelo.addColumn("Load date");
+        modelo.addColumn("Return date");
+
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{ ?= call control_personborrowsbook.showUserReturnedBook(?)}");
+
+
+
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2,pid_user);
+        stmt.executeQuery();
+        ResultSet r =(ResultSet) stmt.getObject(1);
+        while(r.next()){
+                 
+               data [0] = r.getString(1);
+               data [1] = r.getString(2);
+               data [2] = r.getString(3);
+               data [3] = r.getString(4);
+               data [4] = r.getString(5);
+               data [5] = r.getString(6);
+                modelo.addRow(data);
+             
+                 
+                
+                 
+                 
+             }
+        
+
+        return modelo;
+   } 
+    
+        public static DefaultTableModel showUserNotReturnedBooks(int pid_user)throws SQLException{   
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        
+        
+        String data [] = new String[6];
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID Loan");
+        modelo.addColumn("Title");
+        modelo.addColumn("First name");
+        modelo.addColumn("Last name");
+        modelo.addColumn("Load date");
+        modelo.addColumn("Return date");
+
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{ ?= call control_personborrowsbook.showUserNotReturnedBook(?)}");
+
+
+
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2,pid_user);
+        stmt.executeQuery();
+        ResultSet r =(ResultSet) stmt.getObject(1);
+        while(r.next()){
+                 
+               data [0] = r.getString(1);
+               data [1] = r.getString(2);
+               data [2] = r.getString(3);
+               data [3] = r.getString(4);
+               data [4] = r.getString(5);
+               data [5] = r.getString(6);
+                modelo.addRow(data);
+             
+                 
+                
+                 
+                 
+             }
+        
+
+        return modelo;
+   }
+        
+        public static void InsertPerson(int pid, String pname, String plastName, String pbirthdate, String pemail)throws SQLException, ParseException{
+        String host = "jdbc:oracle:thin:@localhost:1521:dbp";
+        String uName = "PE";
+        String uPass = "PE";
+        Connection con = DriverManager.getConnection(host, uName, uPass);
+        CallableStatement stmt = con.prepareCall("{= call control_person.insert_person(?,?,?,?,?)}");
+         stmt.setInt(1,pid);
+         stmt.setString(2,pname);
+         stmt.setString(3,plastName);
+         stmt.setString(4,pbirthdate);
+         stmt.setString(5,pemail);
+         stmt.execute();
+    }
  }
    
    

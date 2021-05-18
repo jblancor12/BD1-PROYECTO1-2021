@@ -8,6 +8,7 @@ PROCEDURE update_book_id_editorial(pid_book IN NUMBER, pid IN NUMBER);
 PROCEDURE update_book_id_calification(pid_book IN NUMBER, pid IN NUMBER);
 PROCEDURE update_book_id_photo(pid_book IN NUMBER, pid IN NUMBER);
 Function show_books return t_ref_cursor;
+Function show_Ownbooks(pid_user number) return t_ref_cursor;
 FUNCTION getMaxID return NUMBER;
 FUNCTION getbooktitle(pid_book IN NUMBER) RETURN VARCHAR2 ;
 FUNCTION getbookidbook_edition(pid_book IN NUMBER) RETURN NUMBER;
@@ -34,7 +35,18 @@ on j.id_author = b.id_author
 join calification c
 on a.id_calification = c.id_calification;
 return dept_cursor ; 
-end show_books; 
+end show_books;
+
+Function show_Ownbooks(pid_user NUMBER) return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select  a.title
+from book a
+join personownsbook b
+on a.id_book = b.id_book
+where b.id_person = pid_user;
+return dept_cursor ; 
+end show_Ownsbooks;  
 
 
 FUNCTION getMaxID RETURN NUMBER
