@@ -1,7 +1,8 @@
 create or replace PACKAGE control_person IS
-
+Type t_ref_cursor is ref cursor;
+Function show_persons(pid_user number) return t_ref_cursor;
 FUNCTION PasswordEncryption(pencrypt_password IN VARCHAR2) RETURN VARCHAR2;
-PROCEDURE insert_person(pid_person IN NUMBER,pfirst_name IN VARCHAR2, plast_name VARCHAR2, pbirth_day DATE,  pemail VARCHAR2) ;
+PROCEDURE insert_person(pid_person IN NUMBER,pfirst_name IN VARCHAR2, plast_name VARCHAR2, pbirth_day varchar2,  pemail VARCHAR2) ;
 PROCEDURE insert_user(pid_person IN NUMBER,pfirst_name IN VARCHAR2, plast_name VARCHAR2, pbirth_day VARCHAR2,  
                                             pemail VARCHAR2, pusername VARCHAR2, ppassword VARCHAR2);
 PROCEDURE remove_person(pid_person IN NUMBER);
@@ -11,7 +12,7 @@ PROCEDURE update_person_birthday(pid_person IN NUMBER, pbirth_day IN DATE);
 PROCEDURE update_person_email(pid_person IN NUMBER, pemail IN VARCHAR2);
 PROCEDURE update_person_username(pid_person IN NUMBER, puser_name IN VARCHAR2);
 PROCEDURE update_person_password(pid_person IN NUMBER, ppassword IN VARCHAR2);
-PROCEDURE update_person_type_person(pid_person IN NUMBER, ptype IN NUMBER);
+/*PROCEDURE update_person_type_person(pid_person IN NUMBER, ptype IN NUMBER);*/
 FUNCTION getPersonFirstName(pid_person IN NUMBER) RETURN VARCHAR2 ;
 FUNCTION getPersonLastName(pid_person IN NUMBER) RETURN VARCHAR2;
 FUNCTION getPersonBirthDay(pid_person IN NUMBER) RETURN DATE;
@@ -19,11 +20,58 @@ FUNCTION getPersonUsername(pid_person IN NUMBER) RETURN VARCHAR2;
 FUNCTION getPersonPassword(pusername IN VARCHAR2) RETURN VARCHAR2;
 FUNCTION getPersonAge(pId IN NUMBER) RETURN NUMBER;
 FUNCTION getPersonID(pusername varchar2) RETURN NUMBER;
-FUNCTION getPersonIdTypePerson(pid_person IN NUMBER) RETURN NUMBER;
+/*FUNCTION getPersonIdTypePerson(pid_person IN NUMBER) RETURN NUMBER;*/
+FUNCTION getMaxId RETURN NUMBER;
+Function show_persons2 return t_ref_cursor;
 END control_person; 
 /
 create or replace PACKAGE BODY control_person IS
-/*
+
+Function show_persons2 return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select id_person, first_name, last_name, birthday, email
+from person;
+return dept_cursor;
+end show_persons2;
+
+Function show_persons(pid_user number) return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select id_person, first_name, last_name
+from person
+minus
+select id_person, first_name, last_name
+from person a
+join personknowsperson b
+on a.id_person= b.id_person2
+where b.id_person1=pid_user;
+return dept_cursor;
+end show_persons;
+
+
+FUNCTION getMaxId RETURN NUMBER
+AS
+    Maxid number(9);
+    BEGIN
+	select Max(id_person) 
+	into Maxid 
+	from person;
+	return Maxid;
+	EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+            DBMS_OUTPUT.PUT_LINE ('Your SELECT statement retrieved multiple rows.');
+            WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE ('Could not find a register with the name||pcnombre.');
+            WHEN STORAGE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('PL/SQL ran out of memory or memory is corrupted.');
+            WHEN VALUE_ERROR THEN
+            DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
+            WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
+  END;
+
+
 FUNCTION PasswordEncryption(pencrypt_password IN VARCHAR2) RETURN VARCHAR2
 AS
     data VARCHAR2(255);
@@ -36,26 +84,12 @@ AS
 
     RETURN data;
   END;
-*/
 
-FUNCTION PasswordEncryption(pencrypt_password IN VARCHAR2) RETURN VARCHAR2
-AS
-    data VARCHAR2(255);
-    BEGIN
-    data := rpad(pencrypt_password, (trunc(length(pencrypt_password)/8)+1)*8, chr(0) );
-    dbms_obfuscation_toolkit.DESEncrypt
-          ( input_string => data,
-            key_string   => 'DBAKey03',
-            encrypted_string=> data );
-
-    RETURN data;
-  END;
-
-PROCEDURE insert_person(pid_person IN NUMBER,pfirst_name IN VARCHAR2, plast_name VARCHAR2, pbirth_day DATE,  pemail VARCHAR2)  AS
+PROCEDURE insert_person(pid_person IN NUMBER,pfirst_name IN VARCHAR2, plast_name VARCHAR2, pbirth_day VARCHAR2,  pemail VARCHAR2) AS
 
 BEGIN 
 	INSERT INTO person(id_person,first_name, last_name, birthday, email)
-	VALUES(pid_person,pfirst_name, plast_name, pbirth_day, pemail);
+	VALUES(pid_person,pfirst_name, plast_name, TO_DATE(pbirth_day,'yyyy,mm,dd'), pemail);
 	COMMIT;
 END insert_person;
 
@@ -94,7 +128,7 @@ e_invalid_person EXCEPTION;
 BEGIN
 	UPDATE person
 	SET first_name = pfirst_name
-	WHERE id_person = id_person;
+	WHERE id_person = pid_person;
 	COMMIT;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_person;
@@ -182,7 +216,7 @@ e_invalid_person EXCEPTION;
 BEGIN
 	UPDATE person
 	SET username = puser_name
-	WHERE id_person = id_person;
+	WHERE id_person = pid_person;
 	COMMIT;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_person;
@@ -199,13 +233,13 @@ BEGIN
 END update_person_username;
 
 
-PROCEDURE update_person_type_person(pid_person IN NUMBER, ptype IN NUMBER)
+/*PROCEDURE update_person_type_person(pid_person IN NUMBER, ptype IN NUMBER)
 as
 e_invalid_person EXCEPTION;
 BEGIN
 	UPDATE person
 	SET id_person_type = ptype
-	WHERE id_person = id_person;
+	WHERE id_person = pid_person;
 	COMMIT;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_person;
@@ -219,7 +253,7 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE('An error has ocurred in the attempt to update.');
         DBMS_OUTPUT.PUT_LINE(SQLERRM);
         DBMS_OUTPUT.PUT_LINE(SQLCODE);
-END update_person_type_person;
+END update_person_type_person;*/
 
 
 PROCEDURE update_person_password(pid_person IN NUMBER, ppassword IN VARCHAR2) AS
@@ -227,7 +261,7 @@ e_invalid_person EXCEPTION;
 BEGIN
 	UPDATE person
 	SET password = ppassword
-	WHERE id_person = id_person;
+	WHERE id_person = pid_person;
 	COMMIT;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_person;
@@ -401,7 +435,7 @@ BEGIN
 END;
 
 
-FUNCTION getPersonIdTypePerson(pid_person IN NUMBER) RETURN NUMBER
+/*FUNCTION getPersonIdTypePerson(pid_person IN NUMBER) RETURN NUMBER
 IS 
     vcPersonIdTypePerson NUMBER(6);
     BEGIN
@@ -421,7 +455,7 @@ IS
             DBMS_OUTPUT.PUT_LINE ('An arithmetic, conversion, truncation, or size constraint error ocurred.');
             WHEN OTHERS THEN
             DBMS_OUTPUT.PUT_LINE ('Unexpected error.');
-    END;
+    END;*/
 
 
 FUNCTION getPersonID(pusername varchar2) RETURN NUMBER

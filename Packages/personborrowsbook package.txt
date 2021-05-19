@@ -2,10 +2,10 @@ create or replace package control_personborrowsbook is
 Type t_ref_cursor is ref cursor;
 PROCEDURE insert_personborrowsbook (pid_person IN NUMBER, pid_book NUMBER,ploan_date  varchar);
 PROCEDURE remove_personborrowsbook (pid_loan NUMBER);
-PROCEDURE update_pbb_id_person(pid_person IN NUMBER, pnewid NUMBER);
+PROCEDURE update_pbb_id_person(pid_loan IN NUMBER, pnewid NUMBER);
 PROCEDURE update_pbb_id_book(pid_loan IN NUMBER, pnewid NUMBER);
-PROCEDURE update_pbb_loan_date(pid_loan number, pdate DATE);
-PROCEDURE update_pbb_return_date(pid_loan number, pdate DATE);
+PROCEDURE update_pbb_loan_date(pid_loan number, pdate varchar2);
+PROCEDURE update_pbb_return_date(pid_loan number, pdate varchar2);
 Function showUserAvailableBook(pid_user number) return t_ref_cursor;
 Function showUserReturnedBook(pid_user number) return t_ref_cursor;
 Function showUserNotReturnedBook(pid_user number) return t_ref_cursor;
@@ -34,7 +34,7 @@ join personownsbook b
 on a.id_book = b.id_book
 right  join personborrowsbook c
 on b.id_book = c.id_book
-where b.id_person = 4 and c.return_date is null;
+where b.id_person = pid_user and c.return_date is null;
 Return dept_cursor;
 end showUserAvailableBook; 
 
@@ -99,12 +99,12 @@ begin
         DBMS_OUTPUT.PUT_LINE(SQLCODE);
 end remove_personborrowsbook;
 
-PROCEDURE update_pbb_id_person(pid_person IN NUMBER, pnewid NUMBER)AS
+PROCEDURE update_pbb_id_person(pid_loan IN NUMBER, pnewid NUMBER)AS
 e_invalid_exc EXCEPTION;
 begin
     update personborrowsbook
     set id_person=pnewid
-    where id_person=pid_person;
+    where id_loan=pid_loan;
     commit;
     IF SQL%NOTFOUND THEN 
         RAISE e_invalid_exc;
@@ -141,11 +141,11 @@ begin
         DBMS_OUTPUT.PUT_LINE(SQLCODE);
 end update_pbb_id_book;
 
-PROCEDURE update_pbb_loan_date(pid_loan number, pdate DATE)AS
+PROCEDURE update_pbb_loan_date(pid_loan number, pdate varchar2)AS
 e_invalid_exc EXCEPTION;
 begin
     update personborrowsbook
-    set loan_date=pdate
+    set loan_date=TO_DATE(pdate,'yyyy/mm/dd')
     where id_loan=pid_loan;
     commit;
     IF SQL%NOTFOUND THEN 
@@ -163,11 +163,11 @@ begin
 end update_pbb_loan_date;
 
 
-PROCEDURE update_pbb_return_date(pid_loan number, pdate DATE)AS
+PROCEDURE update_pbb_return_date(pid_loan number, pdate varchar2)AS
 e_invalid_exc EXCEPTION;
 begin
     update personborrowsbook
-    set return_date=pdate
+    set return_date=TO_DATE(pdate,'yyyy/mm/dd')
     where id_loan=pid_loan;
     commit;
     IF SQL%NOTFOUND THEN 

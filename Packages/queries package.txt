@@ -1,0 +1,103 @@
+Create or replace package control_Queries is
+Type t_ref_cursor is ref cursor;
+Function showAvailableBook return t_ref_cursor;
+Function showNotReturnedBook return t_ref_cursor;
+Function show_books return t_ref_cursor;
+/*Function topLendedBooks(pN number) return t_ref_cursor;*/
+end control_Queries;
+
+
+
+
+create or replace PACKAGE BODY control_Queries IS
+
+Function showAvailableBook return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select *, count(1)
+from(
+select a.id_book, a.title 
+from book a 
+join personownsbook b
+on a.id_book = b.id_book
+left  join personborrowsbook c
+on b.id_book = c.id_book
+minus
+select Distinct (a.id_book), a.title
+from book a 
+join personownsbook b
+on a.id_book = b.id_book
+right  join personborrowsbook c
+on b.id_book = c.id_book
+where c.return_date is null;
+)
+Return dept_cursor;
+end showAvailableBook; 
+
+
+
+
+Function showNotReturnedBook return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select b.id_loan, a.title , c.first_name, c.last_name, b.loan_date, b.return_date, Count(1)
+from book a 
+join personborrowsbook b
+on a.id_book = b.id_book
+join person c 
+on b.id_person = c.id_person
+join personownsbook d
+on a.id_book = d.id_book
+where b.return_date  is  null
+order by a.title asc;
+Return dept_cursor;
+end showUserNotReturnedBook;
+
+
+Function show_books return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select a.id_book, a.title, e.description, d.description,b.name, c.score, count(1)
+from book a
+join editorial e
+on a.id_editorial = e.id_editorial
+join bookedition d
+on a.id_book_edition= d.id_edition
+join bookxauthor j
+on a.id_book = j.id_book
+join author b
+on j.id_author = b.id_author
+join calification c
+on a.id_calification = c.id_calification
+order by a.title asc;
+return dept_cursor ; 
+end show_books;
+
+
+/*Function topLendedBooks(pN number) return t_ref_cursor is dept_cursor t_ref_cursor;
+begin
+open dept_cursor for
+select *
+from(
+select e.id_book, a.title, e.description, d.description,b.name, c.score, count(1) as libro
+from book a
+join personborrowsbook e
+on a.id_book = d.id_book
+join editorial e
+on a.id_editorial = e.id_editorial
+join bookedition d
+on a.id_book_edition= d.id_edition
+join bookxauthor j
+on a.id_book = j.id_book
+join author b
+on j.id_author = b.id_author
+join calification c
+on a.id_calification = c.id_calification
+group by e.id_book order by a.title asc
+)
+where rownum <= pN;
+return dept_cursor ; 
+end show_books;
+
+*/
+end control_queries;

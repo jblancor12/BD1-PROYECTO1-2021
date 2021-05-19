@@ -5,7 +5,7 @@ PROCEDURE remove_personknowsperson (pid_person1 IN NUMBER,pid_person2 in NUMBER)
 PROCEDURE update_pkp_id_person1(pid_person1 IN NUMBER, pnewid NUMBER);
 PROCEDURE update_pkp_id_person2(pid_person2 IN NUMBER, pnewid NUMBER);
 PROCEDURE update_pkp_id_relationship(pid_relationship IN NUMBER, pnewid NUMBER);
-FUNCTION showPersonRelations(pid_user Number) return Type t_ref_cursor is ref cursor;
+FUNCTION showPersonRelations(pid_user Number) return t_ref_cursor ;
 FUNCTION getpkpIdperson1(pid_person2 IN NUMBER) RETURN NUMBER;
 FUNCTION getpkpIdperson2(pid_person1 IN NUMBER) RETURN NUMBER;
 FUNCTION getpkpIdRelationship(pid_person1 IN NUMBER, pid_person2 IN NUMBER) RETURN NUMBER;
@@ -17,7 +17,7 @@ create or replace PACKAGE BODY control_personknowsperson IS
 Function showPersonRelations(pid_user NUMBER) return t_ref_cursor is dept_cursor t_ref_cursor;
 begin
 open dept_cursor for
-select b.id_person, b.first_name, b.last_name
+select b.id_person, b.first_name, b.last_name, c.description
 from personknowsperson a
 join person b 
 on a.id_person2 = b.id_person

@@ -54,6 +54,12 @@ public class Lendbooks extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         LoanIDTF = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -65,13 +71,24 @@ public class Lendbooks extends javax.swing.JDialog {
 
         jLabel3.setText("Loan Date");
 
+        LoanDateTF1.setText("-");
+
+        LoanDate2.setText("-");
         LoanDate2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 LoanDate2ActionPerformed(evt);
             }
         });
 
+        LoanDate3.setText("-");
+
         jLabel4.setText("Return Date");
+
+        ReturnDate1.setText("-");
+
+        ReturnDate2.setText("-");
+
+        ReturnDate3.setText("-");
 
         LendBooksSeeButton.setText("See");
         LendBooksSeeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -101,12 +118,26 @@ public class Lendbooks extends javax.swing.JDialog {
 
         jLabel5.setText("Loan ID");
 
+        LoanIDTF.setText("0");
+
         jButton1.setText("LendBooks");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        jLabel6.setText("year");
+
+        jLabel7.setText("month");
+
+        jLabel8.setText("day");
+
+        jLabel9.setText("year");
+
+        jLabel10.setText("month");
+
+        jLabel11.setText("day");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -123,21 +154,37 @@ public class Lendbooks extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(ReturnDate1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(ReturnDate2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel3)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(LoanDateTF1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(LoanDateTF1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel6))
                                         .addGap(18, 18, 18)
-                                        .addComponent(LoanDate2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(12, 12, 12)
+                                                .addComponent(jLabel7))
+                                            .addComponent(LoanDate2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(ReturnDate1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel9))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel10)
+                                            .addComponent(ReturnDate2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(LoanDate3)
-                                    .addComponent(ReturnDate3, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(LoanDate3)
+                                        .addComponent(ReturnDate3, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(12, 12, 12)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel11)
+                                            .addComponent(jLabel8)))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
@@ -194,19 +241,28 @@ public class Lendbooks extends javax.swing.JDialog {
                                     .addComponent(jLabel3)
                                     .addComponent(LoanDateTF1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(LoanDate2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(LoanDate3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(31, 31, 31)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(ReturnDate1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(ReturnDate2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(ReturnDate3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                                .addComponent(LendBooksExeButton)
-                                .addGap(21, 21, 21))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(LBBooksCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                    .addComponent(LoanDate3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(LBBooksCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel7)
+                                .addComponent(jLabel8)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(ReturnDate1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ReturnDate2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ReturnDate3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11))
+                        .addGap(18, 18, 18)
+                        .addComponent(LendBooksExeButton)
+                        .addGap(21, 21, 21))))
         );
 
         pack();
@@ -225,7 +281,7 @@ public class Lendbooks extends javax.swing.JDialog {
             libros = connect.connectdbp.UserAvBooksList(inicio.id_user);
             personas = connect.connectdbp.UserKnonwList(inicio.id_user);
             LBBooksCB.removeAllItems();
-            LBBooksCB.removeAllItems();
+            LBPersonCB.removeAllItems();
             for (String i: libros) {
                 
                 LBBooksCB.addItem(i);
@@ -270,6 +326,45 @@ public class Lendbooks extends javax.swing.JDialog {
         }
         System.out.println(id_person);
         System.out.println(id_book);
+        
+        if(LendBooksActionCB.getSelectedItem().equals("Insert")){
+            String loan_date = LoanDateTF1.getText()+"/"+LoanDate2.getText()+"/"+LoanDate3.getText();
+            try {
+                connect.connectdbp.InsertPBB(Integer.valueOf(id_person),Integer.valueOf(id_book),loan_date);
+            } catch (SQLException ex) {
+                Logger.getLogger(Lendbooks.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        else if (LendBooksActionCB.getSelectedItem().equals("Update")){
+            int id_loan = Integer.valueOf(LoanIDTF.getText());
+            String loan_date = LoanDateTF1.getText()+"/"+LoanDate2.getText()+"/"+LoanDate3.getText();
+            String return_date = ReturnDate1.getText()+"/"+ReturnDate2.getText()+"/"+ReturnDate3.getText();
+            System.out.println(loan_date);
+            System.out.println(return_date);
+            try {
+                if(LBBooksCB.getSelectedItem()!=null){
+                connect.connectdbp.UpdatePBBBook(id_loan, Integer.valueOf(id_book));
+                }
+                connect.connectdbp.UpdatePBBPerson(id_loan, Integer.valueOf(id_person));
+                if(loan_date.equals("-/-/-")){
+                    System.out.println(loan_date);
+                }
+                else {
+                    connect.connectdbp.UpdatePBBLoanD(id_loan, loan_date);
+                }
+                if(return_date.equals("-/-/-")){
+                    connect.connectdbp.UpdatePBBLoanD(id_loan, return_date);
+                }
+                else{
+                connect.connectdbp.UpdatePBBReturnD(id_loan, return_date);
+            }
+            } catch (SQLException ex) {
+                Logger.getLogger(Lendbooks.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+       
+        
     }//GEN-LAST:event_LendBooksExeButtonActionPerformed
 
     private void LendBooksSeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LendBooksSeeButtonActionPerformed
@@ -352,10 +447,16 @@ public class Lendbooks extends javax.swing.JDialog {
     private javax.swing.JTextField ReturnDate3;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

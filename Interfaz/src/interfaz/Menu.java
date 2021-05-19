@@ -60,6 +60,11 @@ public class Menu extends javax.swing.JDialog {
         });
 
         QueriesButtons.setText("Queries");
+        QueriesButtons.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                QueriesButtonsActionPerformed(evt);
+            }
+        });
 
         Lend_BooksButton.setText("Lend Books");
         Lend_BooksButton.addActionListener(new java.awt.event.ActionListener() {
@@ -78,9 +83,8 @@ public class Menu extends javax.swing.JDialog {
                     .addComponent(Lend_BooksButton)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(CatalogsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(PersonsButtons, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(QueriesButtons, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(PersonsButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(QueriesButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(BooksButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(168, Short.MAX_VALUE))
         );
@@ -128,6 +132,12 @@ public class Menu extends javax.swing.JDialog {
         Lendbooks lb1 = new Lendbooks(v1,true);
         lb1.setVisible(true);
     }//GEN-LAST:event_Lend_BooksButtonActionPerformed
+
+    private void QueriesButtonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QueriesButtonsActionPerformed
+        // TODO add your handling code here:
+        queries vqueries = new queries(v1,true);
+        vqueries.setVisible(true);
+    }//GEN-LAST:event_QueriesButtonsActionPerformed
 
     /**
      * @param args the command line arguments
